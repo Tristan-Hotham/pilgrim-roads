@@ -1,0 +1,692 @@
+<!doctype html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Pilgrim Roads</title>
+<meta name="description" content="An interactive map of {{total.km|int}} km of waymarked pilgrim routes in OpenStreetMap and {{sites.n|int}} pilgrimage sites in Wikidata: the Camino de Santiago web across {{fam.camino.n_countries|int}} countries, the Via Francigena, the St Olav Ways, the Marian ways, and what the map leaves out.">
+<meta property="og:title" content="Pilgrim roads: the waymarked paths to Santiago, Rome, Trondheim and beyond">
+<meta property="og:description" content="{{fam.camino.km|int}} km of waymarked Camino de Santiago in OpenStreetMap, more of it in Germany ({{fam.camino.by_iso.DEU|int}} km) than in Spain ({{fam.camino.by_iso.ESP|int}} km). Plus the Via Francigena, the St Olav Ways and {{sites.n|int}} pilgrimage sites.">
+<meta property="og:image" content="https://maps.tristanhotham.com/pilgrim-roads/header.png">
+<meta property="og:url" content="https://maps.tristanhotham.com/pilgrim-roads/">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600;9..144,800;9..144,900&family=IBM+Plex+Mono:wght@400;500&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;1,8..60,400&display=swap">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/maplibre-gl@4.7.1/dist/maplibre-gl.css">
+<style>
+/* Pilgrim roads: parchment, the orange of the Camino arrows, the blue of the scallop shell sign. */
+:root{
+  --bg:#F6F3EC; --panel:#ECE7DC; --fg:#1D2128; --muted:#636A72; --rule:#DDD6C8; --card:#FFFDF8; --border:#CBC3B3;
+  --hot:#D2541B; --cool:#2F5FA7; --gold:#C9961A; --ink:#1F2F4D; --land:#E4DFD3; --sea:#EAEFF1; --coast:#FFFFFF; --ring:#8A7F70;
+  --display:"Fraunces",Georgia,"Times New Roman",serif;
+  --body:"Source Serif 4",Georgia,"Times New Roman",serif;
+  --mono:"IBM Plex Mono",ui-monospace,Menlo,Consolas,monospace;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --bg:#13161B; --panel:#1D2129; --fg:#ECEEF1; --muted:#A2A8B0; --rule:#30353F; --card:#181C23; --border:#444B57;
+  --hot:#FF8048; --cool:#7DA7E6; --gold:#F0BE4A; --ink:#A9BBDD; --land:#2A2F38; --sea:#171B21; --coast:#3A404B; --ring:#9A9286; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#13161B; --panel:#1D2129; --fg:#ECEEF1; --muted:#A2A8B0; --rule:#30353F; --card:#181C23; --border:#444B57;
+  --hot:#FF8048; --cool:#7DA7E6; --gold:#F0BE4A; --ink:#A9BBDD; --land:#2A2F38; --sea:#171B21; --coast:#3A404B; --ring:#9A9286; color-scheme:dark}
+*,*::before,*::after{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--bg);color:var(--fg);font:400 18px/1.62 var(--body);
+  padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));overflow-x:hidden}
+.wrap{max-width:700px;margin:0 auto;padding-block:28px 64px}
+.wrap .bleed{width:min(1180px,calc(100vw - 32px));margin-left:calc((100% - min(1180px,100vw - 32px))/2);margin-right:0}
+a{color:inherit;text-decoration-color:var(--hot);text-underline-offset:3px}
+.kicker{font:500 12px/1 var(--mono);letter-spacing:.12em;text-transform:uppercase;color:var(--muted);display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+.kicker b{background:var(--ink);color:#fff;padding:5px 8px;font-weight:500}
+:root[data-theme="dark"] .kicker b{color:#13161B}
+header.hero{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:12px 24px;align-items:end;border-bottom:6px double var(--fg);padding-bottom:22px;margin-top:18px}
+h1{font:900 clamp(44px,11vw,94px)/.9 var(--display);letter-spacing:-.02em;margin:0;text-wrap:balance}
+h1 .a{color:var(--hot)}
+.mark{width:clamp(78px,16vw,128px);height:auto;display:block;color:var(--fg)}
+.dek{grid-column:1/-1;font-size:21px;line-height:1.42;margin:8px 0 0;max-width:56ch}
+.byline{font:400 13px/1.4 var(--mono);color:var(--muted);margin-top:14px}
+h2{font:800 34px/1.04 var(--display);letter-spacing:-.01em;margin:54px 0 10px;text-wrap:balance}
+h2 .n{font:500 13px/1 var(--mono);color:var(--hot);display:block;letter-spacing:.1em;margin-bottom:10px}
+h3{font:600 20px/1.25 var(--display);margin:28px 0 6px}
+p{margin:0 0 16px}
+.lede::first-letter{font:900 72px/.8 var(--display);float:left;margin:6px 10px 0 0;color:var(--hot)}
+.stats{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:1px;background:var(--rule);border:1px solid var(--rule);margin:26px 0 8px}
+.stats div{background:var(--card);padding:14px 12px}
+.stats b{display:block;font:900 clamp(22px,4.4vw,32px)/1 var(--display);letter-spacing:-.01em}
+.stats b.h{color:var(--hot)} .stats b.c{color:var(--cool)} .stats b.g{color:var(--gold)} .stats b.p{color:var(--ink)}
+.stats span{font:400 12px/1.35 var(--mono);color:var(--muted);display:block;margin-top:6px}
+@media (max-width:600px){.stats{grid-template-columns:repeat(2,minmax(0,1fr))}}
+.figure{margin:26px 0 30px}
+.fig-h{font:600 19px/1.25 var(--display);margin:0 0 4px}
+.fig-sub{font:400 13px/1.45 var(--mono);color:var(--muted);margin:0 0 12px}
+.src{font:400 12px/1.45 var(--mono);color:var(--muted);margin-top:10px}
+.chart{width:100%;position:relative}
+.chart svg{display:block;width:100%;height:auto;overflow:visible}
+svg text{font-family:var(--mono);fill:var(--fg)}
+.lab{font-size:12px}.lab.m{fill:var(--muted)}.lab.b{font-weight:500}.lab.s{font-size:11px}
+.tip{position:absolute;pointer-events:none;background:var(--fg);color:var(--bg);font:400 12px/1.45 var(--mono);padding:8px 10px;border-radius:3px;max-width:300px;z-index:1000;transform:translate(-50%,calc(-100% - 12px));display:none}
+.tip b{font-weight:500}
+.controls{display:flex;gap:8px;align-items:center;margin:0 0 10px;flex-wrap:wrap}
+.scrollrow{display:flex;gap:6px;overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:thin;padding-bottom:2px;max-width:100%}
+.scrollrow .btn{flex:0 0 auto;white-space:nowrap}
+.ctl-l{font:500 11px/1 var(--mono);letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin-right:2px;flex:0 0 auto;align-self:center}
+.btn{font:500 12px/1 var(--mono);background:var(--card);color:var(--fg);border:1px solid var(--border);border-radius:3px;padding:8px 10px;cursor:pointer;min-height:36px}
+.btn[aria-pressed="true"]{background:var(--fg);color:var(--bg);border-color:var(--fg)}
+.btn i{display:inline-block;width:14px;height:4px;border-radius:2px;margin-right:6px;vertical-align:2px}
+.btn i.dot{width:10px;height:10px;border-radius:50%;vertical-align:-1px;border:1px solid rgba(0,0,0,.15)}
+.btn:focus-visible,input:focus-visible,summary:focus-visible,select:focus-visible{outline:2px solid var(--hot);outline-offset:2px}
+.searchbox{position:relative;flex:1 1 260px;min-width:0}
+input[type=search]{font:400 15px/1 var(--mono);background:var(--card);color:var(--fg);border:1px solid var(--border);border-radius:3px;padding:10px 11px;min-height:40px;width:100%}
+.suggest{position:absolute;left:0;right:0;top:100%;margin:2px 0 0;padding:0;list-style:none;background:var(--card);border:1px solid var(--border);z-index:1001;font:400 13px/1.3 var(--mono);display:none;max-height:340px;overflow:auto}
+.suggest li{padding:8px 10px;cursor:pointer;border-bottom:1px solid var(--rule)}
+.suggest li span{color:var(--muted)}
+.suggest li[aria-selected="true"],.suggest li:hover{background:var(--panel)}
+.mapgrid{display:grid;grid-template-columns:minmax(0,1fr) 330px;gap:14px;align-items:start}
+@media (max-width:900px){.mapgrid{grid-template-columns:1fr}}
+.side{background:var(--card);border:1px solid var(--border);padding:12px 12px 10px;font:400 13px/1.45 var(--mono);max-height:660px;overflow:auto}
+@media (max-width:900px){.side{max-height:none}}
+.side h4{font:500 11px/1 var(--mono);letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin:14px 0 8px}
+.side h4:first-child{margin-top:2px}
+.side .big{font:800 24px/1.12 var(--display);margin:2px 0 4px}
+.side .sub{color:var(--muted);font-size:12px;margin:0 0 8px}
+.side table{width:100%;border-collapse:collapse;margin:4px 0 6px}
+.side td{padding:4px 4px 4px 0;border-bottom:1px solid var(--rule);vertical-align:top}
+.side td.num{text-align:right;white-space:nowrap}
+.side td.nm{text-align:right}
+.side .bar{height:7px;border-radius:2px;margin-top:3px}
+.back{font:400 12px var(--mono);background:none;border:0;color:var(--muted);padding:0;cursor:pointer;text-decoration:underline;margin-bottom:6px}
+.go{cursor:pointer;text-decoration:underline;text-decoration-color:var(--border);text-underline-offset:3px}
+.lmap{height:640px;border:1px solid var(--border);background:var(--sea);border-radius:2px;position:relative;overflow:hidden}
+@media (max-width:600px){.lmap{height:min(66vh,480px)}}
+.maplibregl-map{font:400 12px/1.4 var(--mono)}
+.maplibregl-ctrl-group{background:var(--card)!important}
+:root[data-theme="dark"] .maplibregl-ctrl-group button .maplibregl-ctrl-icon{filter:invert(1)}
+.maplibregl-ctrl-attrib{background:color-mix(in srgb,var(--card) 85%,transparent)!important;color:var(--muted);font:400 11px/1.3 var(--mono)!important}
+.maplibregl-ctrl-attrib a{color:var(--fg)!important}
+.maplibregl-popup-content{background:var(--card);color:var(--fg);font:400 12.5px/1.45 var(--mono);padding:11px 13px;border:1px solid var(--border);border-radius:3px;box-shadow:0 3px 12px rgba(0,0,0,.2)}
+.maplibregl-popup-content b.t{display:block;font:700 16px/1.2 var(--display);margin-bottom:2px}
+.maplibregl-popup-content .al{color:var(--muted);font-size:11.5px;margin-bottom:4px}
+.maplibregl-popup-tip{border-top-color:var(--card)!important;border-bottom-color:var(--card)!important}
+.maplibregl-popup-close-button{font-size:18px;color:var(--muted);padding:0 6px}
+.lyr{position:relative}
+.lyrBtn{background:var(--card);color:var(--fg);border:1px solid var(--border);border-radius:3px;font:600 12px/1 var(--mono);padding:8px 10px;cursor:pointer;box-shadow:0 1px 4px rgba(0,0,0,.12)}
+.lyrBtn[aria-expanded="true"]{background:var(--fg);color:var(--bg)}
+.lyrPanel{background:var(--card);color:var(--fg);border:1px solid var(--border);border-radius:3px;padding:10px 12px 8px;margin-top:6px;width:250px;box-shadow:0 2px 10px rgba(0,0,0,.15);font:400 12px/1.3 var(--mono);max-height:min(60vh,500px);overflow:auto}
+.lyrPanel[hidden]{display:none}
+.lyrPanel .row{margin:0 0 9px}
+.lyrPanel label{display:flex;gap:6px;align-items:center;cursor:pointer;font-weight:600}
+.lyrPanel input[type=range]{width:100%;accent-color:var(--fg)}
+.lyrPanel .sub{display:flex;gap:6px;align-items:center;color:var(--muted);font-size:11px;margin-top:3px}
+.lyrPanel .hd{font:500 10.5px/1 var(--mono);letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin:10px 0 7px;border-top:1px solid var(--rule);padding-top:9px}
+.lyrPanel .reset{font:400 11px var(--mono);color:var(--muted);background:none;border:0;padding:0;cursor:pointer;text-decoration:underline}
+.lyrPanel p.sub{display:block}
+.cityL{font:500 11px/1 var(--mono);color:var(--fg);white-space:nowrap;text-shadow:0 0 3px var(--bg),0 0 3px var(--bg),0 0 2px var(--bg);pointer-events:none}
+.cityL i{display:inline-block;width:5px;height:5px;border-radius:50%;background:var(--fg);margin-right:4px;vertical-align:1px}
+.cntL{font:700 11px/1 var(--mono);color:var(--fg);white-space:nowrap;text-transform:uppercase;letter-spacing:.06em;opacity:.7;text-shadow:0 0 3px var(--bg),0 0 3px var(--bg);pointer-events:none}
+.ringL{font:500 11px/1 var(--mono);color:var(--ring);white-space:nowrap;text-shadow:0 0 3px var(--sea),0 0 3px var(--sea),0 0 3px var(--sea);pointer-events:none}
+.goalL{font:700 12px/1.1 var(--mono);color:var(--fg);white-space:nowrap;text-shadow:0 0 3px var(--bg),0 0 3px var(--bg),0 0 3px var(--bg);pointer-events:none}
+.mapfail{position:absolute;left:10px;right:10px;bottom:10px;background:var(--card);border:1px solid var(--border);padding:8px 10px;font:400 12px/1.4 var(--mono);z-index:5}
+.fbbar{position:absolute;left:10px;top:10px;z-index:6;display:flex;gap:6px}
+.legend{display:flex;gap:6px 14px;flex-wrap:wrap;font:400 12px/1.3 var(--mono);color:var(--muted);margin-top:8px;align-items:center}
+.legend span{display:inline-flex;align-items:center}
+.legend i{display:inline-block;width:16px;height:4px;margin-right:6px;border-radius:2px}
+.legend i.dot{width:11px;height:11px;border-radius:50%;border:1px solid rgba(0,0,0,.15)}
+.pull{font:600 26px/1.25 var(--display);border-left:6px solid var(--hot);padding:4px 0 4px 18px;margin:30px 0}
+.note{background:var(--panel);border:1px solid var(--rule);padding:14px 16px;font-size:16px;margin:22px 0}
+.note h3{margin-top:0}
+table.tbl{width:100%;border-collapse:collapse;font:400 13px/1.4 var(--mono)}
+table.tbl th{font:500 11px/1 var(--mono);letter-spacing:.06em;text-transform:uppercase;color:var(--muted);text-align:left;padding:6px 6px 6px 0;border-bottom:2px solid var(--fg)}
+table.tbl td{padding:6px 6px 6px 0;border-bottom:1px solid var(--rule);vertical-align:top}
+table.tbl td.r,table.tbl th.r{text-align:right;white-space:nowrap}
+table.tbl tr[data-i]{cursor:pointer}
+table.tbl tr[data-i]:hover td{background:var(--panel)}
+table.tbl i{display:inline-block;width:10px;height:10px;border-radius:2px;margin-right:6px;vertical-align:-1px}
+.tablebox{max-height:460px;overflow:auto;border:1px solid var(--border);background:var(--card);padding:0 10px}
+details{margin:14px 0}
+summary{font:500 13px/1.4 var(--mono);cursor:pointer;color:var(--fg);padding:8px 0}
+.cta{display:flex;gap:10px;flex-wrap:wrap;margin:18px 0}
+.cta a{font:500 13px/1 var(--mono);text-decoration:none;border:1px solid var(--fg);padding:11px 14px;border-radius:3px}
+.cta a.p{background:var(--hot);border-color:var(--hot);color:#fff}
+footer{border-top:6px double var(--fg);margin-top:56px;padding-top:16px;font:400 13px/1.55 var(--mono);color:var(--muted)}
+footer p{margin:0 0 10px}
+.theme{position:fixed;right:12px;bottom:12px;z-index:1002}
+@media print{.theme,.controls{display:none}}
+</style>
+</head>
+<body>
+<div class="wrap">
+<div class="kicker"><b>Data study</b><span>Pilgrimage</span><span>Europe and the world, {{source.osm_year|raw}}</span></div>
+<header class="hero">
+  <h1>Pilgrim <span class="a">roads</span></h1>
+  <svg class="mark" viewBox="0 0 120 120" aria-hidden="true"><g id="heroMark"></g></svg>
+  <p class="dek">Every waymarked pilgrim route I could find in OpenStreetMap, {{total.km|int}} km of path, and {{sites.n|int}} pilgrimage sites from Wikidata. The giant is the Way of St James: {{fam.camino.km|int}} km signed for Santiago de Compostela, spread over {{fam.camino.n_countries|int}} countries, with more of it in Germany than in Spain.</p>
+</header>
+<div class="byline">Dr Tristan Hotham · Independent researcher · 2026 · Data: © OpenStreetMap contributors (ODbL); Wikidata (CC0); Wikipedia (CC BY-SA); Natural Earth</div>
+
+<div class="stats">
+  <div><b class="p">{{total.km|int}} km</b><span>of waymarked pilgrim routes, each stretch counted once, in {{total.n_countries|int}} countries</span></div>
+  <div><b class="h">{{fam.camino.km|int}} km</b><span>of them signed for Santiago: the Camino, Jakobsweg or Droga św. Jakuba</span></div>
+  <div><b class="c">{{fam.camino.by_iso.DEU|int}} km</b><span>of Camino in Germany, against {{fam.camino.by_iso.ESP|int}} km in Spain</span></div>
+  <div><b class="g">{{sites.n|int}}</b><span>pilgrimage sites in Wikidata, in {{sites.n_countries|int}} countries</span></div>
+</div>
+
+<p class="lede">Early in the ninth century, tradition holds, the remains of the apostle James were found in Galicia, and roads began to form towards his tomb. After 1492 Pope Alexander VI declared the Camino de Santiago one of the three great pilgrimages of Christendom, with Jerusalem and the Via Francigena to Rome. Five centuries later it was a quiet road: in 1985 the Pilgrim's Office in Santiago gave its certificate, the Compostela, to {{compostela.first|int}} people. In 2025 it gave {{compostela.last|int}}.</p>
+<p>The revival was not only Spanish. Across Europe, St James societies, hiking clubs and parishes have waymarked old and new routes with the scallop shell, until the Camino became a web reaching from Portugal to Ukraine. Volunteers have mapped much of it in OpenStreetMap, alongside the Via Francigena to Rome, the St Olav Ways to Trondheim, the Marian ways of central Europe and hundreds of smaller pilgrim paths. This page puts all of them on one map, measures them without counting any stretch twice, and adds the shrines and temples that Wikidata records as places of pilgrimage. It also says plainly what is missing, which is a lot of the world.</p>
+
+<h2><span class="n">01 · The map</span>{{total.km|int}} km of pilgrim roads</h2>
+<div class="bleed" id="atlas">
+<div class="controls"><div class="scrollrow" id="famRow"><span class="ctl-l">Routes</span></div></div>
+<div class="controls"><div class="scrollrow" id="showRow"><span class="ctl-l">Show</span></div></div>
+<div class="controls">
+  <div class="searchbox"><input type="search" id="q" placeholder="Search a route, a shrine or a country (Via Francigena, Fatima, Poland...)" aria-label="Search a route, a shrine or a country" autocomplete="off"><ul class="suggest" id="sug" role="listbox"></ul></div>
+</div>
+<div class="controls"><div class="scrollrow" id="focusRow"><span class="ctl-l">Zoom to</span></div></div>
+<div class="mapgrid">
+  <div><div id="map" class="lmap" role="application" aria-label="Map of waymarked pilgrim routes and pilgrimage sites" data-fullscreen-map></div>
+    <div class="legend" id="legend"></div></div>
+  <div class="side" id="side" aria-live="polite"></div>
+</div>
+<p class="src">Lines: OpenStreetMap route relations tagged as pilgrimage routes, coloured by family, simplified for the web (the kilometres in the text come from the full geometry). Dots: Wikidata pilgrimage sites, coloured by religious tradition. Dashed rings: straight line distance from the cathedral of Santiago de Compostela. Click a line or a dot for details. Map data © OpenStreetMap contributors, ODbL. Sites: Wikidata, CC0. Outlines: Natural Earth. Optional relief tiles © Esri.</p>
+</div>
+
+<h2><span class="n">02 · The Camino web</span>More Jakobsweg than Camino</h2>
+<p>Most people picture the Camino as one road across northern Spain, the Camino Francés, about {{wiki.frances_km|int}} km from Roncesvalles to Santiago. In 2024 nearly half of all certificate holders, {{wiki.frances_pct_2024|int}}%, walked it, and {{wiki.sarria_pct_2024|int}}% started in Sarria, just over the {{wiki.min_walk_km|int}} km minimum walk for a Compostela. But the routes signed for Santiago are far longer than that. In OpenStreetMap I count {{fam.camino.km|int}} km of them in {{fam.camino.n_countries|int}} countries, and Spain holds only {{fam.camino.es_pct|int}}%.</p>
+<div class="figure"><p class="fig-h">Waymarked Camino de Santiago, by country</p><p class="fig-sub">Unique kilometres of routes signed for Santiago, whatever the local name: Camino, Caminho, Jakobsweg, Droga św. Jakuba, Svatojakubská cesta, Jakobova pot. Hover a bar; click to fly there.</p><div class="chart" id="caminoChart"></div></div>
+<p>Germany has the most: {{fam.camino.by_iso.DEU|int}} km of Jakobswege, {{fam.camino.de_es_ratio|f2}} times Spain's {{fam.camino.by_iso.ESP|int}} km. Poland follows with {{fam.camino.by_iso.POL|int}} km of Drogi św. Jakuba, then Austria ({{fam.camino.by_iso.AUT|int}} km), Croatia ({{fam.camino.by_iso.HRV|int}} km) and Czechia ({{fam.camino.by_iso.CZE|int}} km). Bavaria alone carries a network of {{longest.1.km|int}} km. Two cautions. First, this measures what is waymarked and mapped, not where pilgrims walk: most Compostela holders walk only the last stretch in Spain, and in 2024 nearly a third started at Sarria. Second, France looks almost empty, with {{fam.camino.fr_km|int}} km. Several of the great French routes, the Via Turonensis and the Via Tolosana among them, are relations missing from this download (section 07), and others are probably mapped as long distance hiking trails without a pilgrimage tag. The real French figure is much larger.</p>
+<p class="pull">There is {{fam.camino.de_es_ratio|f1}} times as much waymarked Way of St James in Germany as in Spain.</p>
+
+<h2><span class="n">03 · Fanning out</span>All roads lead to Santiago, eventually</h2>
+<p>Measure every kilometre of Camino by its straight line distance from the cathedral in Santiago and the shape of the network appears. Only {{fam.camino.within500_pct|int}}% lies within 500 km. Half of it is more than {{fam.camino.median_d|int}} km away, and the busiest band, {{fam.camino.max_band|raw}}, holds {{fam.camino.max_band_pct|int}}% of the total, most of it in Germany, Austria and Croatia. {{fam.camino.over1000_pct|int}}% is more than 1,000 km from the tomb of St James. Turn on the distance rings in the map to see it.</p>
+<div class="figure"><p class="fig-h">How far from Santiago is the Camino?</p><p class="fig-sub">Waymarked Camino kilometres by straight line distance from the cathedral of Santiago de Compostela, with the two countries holding most of each band. Hover a bar.</p><div class="chart" id="bandChart"></div></div>
+<p>The farthest waymarked stretch in the data is the {{fam.camino.far_route|raw}} in {{fam.camino.far_country|raw}}, at {{fam.camino.far_near.city|raw}}, {{fam.camino.far_km|int}} km from Santiago in a straight line; on foot it would be farther still. The northernmost reaches {{fam.camino.north_lat|f1}}°N in {{fam.camino.north_country|raw}}, on the Danish pilgrim route through northern Jutland.</p>
+
+<h2><span class="n">04 · Other roads</span>To Rome, to Trondheim, to Mary</h2>
+<p>The Camino is just over half of all the pilgrim routes mapped. The rest fall into a few families.</p>
+<div class="figure"><p class="fig-h">Waymarked pilgrim routes by family</p><p class="fig-sub">Unique kilometres. A stretch used by two families counts in both ({{total.multi_family_km|int}} km do), so the bars add up to a little more than the {{total.km|int}} km total. Hover a bar.</p><div class="chart" id="famChart"></div></div>
+<p><b>The Via Francigena</b> ({{fam.francigena.km|int}} km) is the medieval road to Rome from Canterbury, documented by Archbishop Sigeric around {{wiki.vf_year|int}} in {{wiki.vf_stages|int}} stages, some {{wiki.vf_sigeric_km|raw}} km. In OpenStreetMap it is mapped as one system of {{longest.0.km|int}} km, the longest in the data, because its variants, its extension south of Rome towards Apulia and Sicily's own Francigene count too. {{fam.francigena.it_pct|int}}% of it is in Italy.</p>
+<p><b>The St Olav Ways</b> ({{fam.olav.km|int}} km) lead to Nidaros Cathedral in Trondheim, the tomb of Norway's saint king. Wikipedia gives the main route from Oslo as about {{wiki.olav_km|int}} km; the mapped network adds the Swedish St Olavsleden from the Baltic coast and the Østerdalen, Borg and Nordleden paths. {{fam.olav.no_pct|int}}% is in Norway.</p>
+<p><b>The Marian ways</b> ({{fam.marian.km|int}} km) lead to shrines of the Virgin Mary. Most belong to the Mária Út, or Via Mariae, a network that runs from Austria through Hungary into Romania, Slovakia, Croatia and Bosnia: Hungary alone has {{fam.marian.by_iso.HUN|int}} km. Portugal's Caminhos de Fátima add {{fam.marian.by_iso.PRT|int}} km.</p>
+<p><b>Everything else</b> ({{fam.other.km|int}} km) ranges from the Lutherweg in Germany and the roads to Assisi in Italy to Sweden's pilgrim paths, Britain's revived saints' ways and, far from Europe, the Kumano Kodō in Japan and the Caminho da Graça to Aparecida in Brazil.</p>
+<div class="figure"><p class="fig-h">The longest mapped pilgrim route systems</p><p class="fig-sub">Top-level OpenStreetMap relations with all their stages, branches and variants, each stretch counted once. "Tag" is the length the mappers wrote in the relation's distance tag, where there is one. Click a row to see it on the map.</p><div class="tablebox"><table class="tbl" id="longTable"></table></div></div>
+<p>Systems with many branches win that table. Counting single relations instead, with no child routes, the longest is the {{longest_leaf.0.name|raw}} in {{longest_leaf.0.country|raw}}, {{longest_leaf.0.km|int}} km, followed by the {{longest_leaf.1.name|raw}} in {{longest_leaf.1.country|raw}} ({{longest_leaf.1.km|int}} km) and the {{longest_leaf.2.name|raw}} ({{longest_leaf.2.km|int}} km). Half of all single relations are shorter than {{leaf_median_km|int}} km: most mappers record a pilgrim road one stage at a time.</p>
+
+<h2><span class="n">05 · Where pilgrims go</span>{{sites.n|int}} places of pilgrimage</h2>
+<p>Wikidata lists {{sites.n|int}} places it classes as pilgrimage sites, in {{sites.n_countries|int}} countries. Germany has the most ({{sites.by_iso.DEU|int}}, mostly Wallfahrtskirchen, pilgrimage churches), then Italy ({{sites.by_iso.ITA|int}}), Spain ({{sites.by_iso.ESP|int}}) and Japan ({{sites.by_iso.JPN|int}}). Japan's are almost all on one island: {{sites.shikoku|int}} sit on Shikoku, home of the {{wiki.shikoku_temples|int}} temple pilgrimage of the monk Kūkai, a walking circuit of about {{wiki.shikoku_km|raw}} km. Relative to population, Austria leads, with {{sites.dens.0.per_m|f1}} sites per million people, ahead of Portugal and Czechia.</p>
+<div class="figure"><p class="fig-h">Pilgrimage sites by country</p><p class="fig-sub">Wikidata items classed as pilgrimage sites. Switch between the count and the rate per million people (countries with 10 or more sites). Hover a bar; click to fly there.</p>
+<div class="controls"><div class="scrollrow" id="siteMode"><button class="btn" data-m="n" aria-pressed="true">Number of sites</button><button class="btn" data-m="pm" aria-pressed="false">Per million people</button></div></div>
+<div class="chart" id="siteChart"></div></div>
+<p>Wikidata records a religion for only {{sites.rec_n|int}} of the sites ({{sites.rec_pct|int}}%), and {{sites.rec_christian_pct|int}}% of those are Christian, almost all Catholic. Reading the rest by their names (a "Wallfahrtskirche", a "Santuário", a "-ji Temple") gives {{sites.trad.Christian|int}} Christian sites, {{sites.trad.Buddhist|int}} Buddhist, {{sites.trad.Muslim|int}} Muslim and {{sites.trad.Hindu|int}} Hindu, with {{sites.trad.Not recorded|int}} still unknown. That split says more about who edits Wikidata, and in which languages, than about where the world's pilgrims go.</p>
+<div class="figure"><p class="fig-h">Religious tradition of the sites</p><p class="fig-sub">Top: the religion recorded in Wikidata. Bottom: the recorded religion, or else one read from the site's name by simple rules. Hover a block.</p><div class="chart" id="tradChart"></div><div class="legend" id="tradLegend"></div></div>
+<p>Do the mapped roads lead to the listed shrines? Only partly. {{sites.near5|int}} sites ({{sites.near5_pct|int}}%) lie within 5 km of a mapped pilgrim route, {{sites.eu_near5_pct|int}}% of those in Europe. Most shrines in Wikidata are local goals, not the ends of long waymarked roads, and many of those roads lead to a single great goal such as Santiago, Rome or Trondheim.</p>
+
+<h2><span class="n">06 · How many walk</span>From {{compostela.first|int}} to {{compostela.last|int}}</h2>
+<p>The Pilgrim's Office counts the certificates it issues to those who walk at least the last {{wiki.min_walk_km|int}} km, or cycle {{wiki.min_cycle_km|int}} km. The numbers, as Wikipedia tabulates them, show the revival: {{compostela.first|int}} in 1985, {{compostela.y1993|int}} in the Holy Year of 1993, {{compostela.y2010|int}} in 2010, a collapse to {{compostela.y2020|int}} in the first year of the pandemic, and a record {{compostela.last|int}} in 2025, {{compostela.x_since_1985|int}} times the 1985 figure. Holy Years, when St James's day on 25 July falls on a Sunday, bring spikes; the next is {{wiki.holy_year_next|int}}.</p>
+<div class="figure"><p class="fig-h">Compostela certificates per year, 1985 to 2025</p><p class="fig-sub">Pilgrim's Office figures as given in Wikipedia's "Way of St. James" article. Gold: Holy Years. Hover a bar.</p><div class="chart" id="compChart"></div></div>
+<p>Compare that with the biggest pilgrimages on Earth. The Hajj to Mecca drew {{wiki.hajj_2026|int}} pilgrims in 2026; the Arba'een walk to Karbala in Iraq draws {{wiki.arbaeen|raw}} people a year, many on foot from Najaf; and about {{wiki.kumbh_2025_m|int}} million attended the Kumbh Mela in India in 2025. Not one of those journeys appears on the map above.</p>
+
+<h2><span class="n">07 · What the map leaves out</span>A European picture of a world habit</h2>
+<p>This is a map of what volunteers have chosen to draw and tag, and they have mostly drawn Europe. {{total.europe_pct|f1}}% of the route kilometres are in Europe. Outside it there are just {{total.outside_km|int}} km in {{total.n_outside_countries|int}} countries: the Caminho da Graça to Aparecida in Brazil ({{total.outside.0.km|int}} km), {{total.outside.1.km|int}} km in Japan, mostly the Kumano Kodō, and a few short paths in Israel, India and elsewhere in Asia. The Shikoku circuit, {{wiki.shikoku_km|raw}} km, is not in the route data at all, only its temples. Wikidata knows the Darb Zubayda, the {{wd.darb_zubayda_km|int}} km Abbasid pilgrim road from Kufa to Mecca, but no OpenStreetMap route draws it. The sites are less lopsided but still {{sites.europe_pct|int}}% European.</p>
+<div class="note"><h3>Gaps in the download</h3><p>The route list came from {{source.ids_requested|int}} OpenStreetMap relation ids. {{source.failed_batches|int}} batches of {{source.ids_failed|int}} ids in all ({{source.failed_pct|f1}}%) failed to download and are missing. Container relations in the data list {{source.subrels_missing|int}} child relations that are not in the extract, and {{source.containers_all_missing|int}} containers have none of their children. Of the {{wd.with_osm|int}} Wikidata pilgrim route items (stations of the cross aside) that name an OpenStreetMap relation, {{wd.with_osm_missing|int}} are missing, among them the Camino Francés as a whole, the Via Turonensis, the Via Tolosana, the Sanabrés and Catalan ways and the Romboleden to Trondheim. Some Spanish stages are here, but the final stretch of the Camino Francés into Santiago is not. Every figure on this page is therefore a lower bound for what OpenStreetMap holds.</p></div>
+
+<h2><span class="n">08 · How I did this</span>Methods and caveats</h2>
+<p><b>Routes.</b> {{source.fetched|int}} OpenStreetMap route relations tagged as pilgrimage routes (or linked to Wikidata pilgrim route items), downloaded from the Overpass API in {{source.osm_year|raw}}. I kept {{source.kept|int}}, leaving out {{source.dropped|int}}: a road, a bus route, a ski piste, a fitness trail, network relations, and six that inspection showed are not pilgrimage routes (a Michigan forest trail named after the Pilgrim River, for instance). {{source.containers|int}} kept relations are containers for others, mostly super-routes made of stages.</p>
+<p><b>No double counting.</b> The same path often belongs to several relations: a stage and its super-route, two routes that share a valley, a cycling and a walking version. I split every way into its point to point segments, with coordinates to four decimal places (about 10 m), and counted each segment once whichever relation and direction it came from. The raw sum of all relations' ways is {{source.km_raw|int}} km; without duplicates it is {{source.km|int}} km, {{source.dup_pct|f1}}% less. Each segment's country is the Natural Earth country at its midpoint.</p>
+<p><b>Families.</b> A relation is Camino if its names (in any language), tags or Wikidata link point to St James or Santiago, or if it carries the scallop shell symbol ({{fam.camino.shell_rel|int}} relations were placed by the shell alone); Via Francigena, St Olav and Marian ways by similar rules; anything else is "other". Stages without a telling name take the family of the route they belong to. The rules are in the code and every relation's family, and the reason for it, is in the data file.</p>
+<p><b>Sites.</b> {{sites.rows|int}} rows from a Wikidata query for pilgrimage sites, {{sites.n|int}} distinct items, {{sites.unlabelled|int}} without an English label. Country from Wikidata, checked against the coordinates. Tradition from Wikidata's religion where given; the name based reading is a rough guide only.</p>
+<p><b>What this is not.</b> A count of pilgrims, or of the routes people actually use. OpenStreetMap is uneven: some countries' volunteers map every waymarked path, others map few, and tagging habits differ (France's long distance trails, for one). Straight line distance from Santiago is not walking distance. Wikipedia supplies the historical facts and the certificate counts.</p>
+<details><summary>Sources and licences</summary>
+<ul>
+<li>OpenStreetMap route relations via the Overpass API, {{source.osm_year|raw}}. © OpenStreetMap contributors, Open Database License (ODbL) 1.0. The route geometry and route table derived from it are released under the ODbL.</li>
+<li>Wikidata pilgrimage sites and pilgrim routes (CC0), queried with QLever.</li>
+<li>Wikipedia articles "Way of St. James", "Via Francigena", "Shikoku Pilgrimage", "St. Olav's Way", "Kumano Kodō", "Hajj", "Arba'een Pilgrimage", "Kumbh Mela" and "Pilgrimage" (CC BY-SA 4.0), for facts quoted in the text and the yearly certificate counts.</li>
+<li>Natural Earth country outlines and populated places (public domain). Optional relief tiles © Esri.</li>
+</ul></details>
+
+<div class="cta"><a class="p" href="https://doi.org/10.5281/zenodo.23878608">Read the paper</a><a href="https://github.com/Tristan-Hotham/pilgrim-roads">Data and code</a><a href="https://blog.tristanhotham.com/2026/10/31/pilgrim-roads/">Blog post</a></div>
+
+<footer>
+<p>Dr Tristan Hotham, Independent researcher. ORCID <a href="https://orcid.org/0000-0003-4931-9349">0000-0003-4931-9349</a>.</p>
+<p>Cite as: Hotham, T. (2026) Pilgrim roads: mapping the waymarked pilgrimage routes and places of OpenStreetMap and Wikidata. Zenodo. <a href="https://doi.org/10.5281/zenodo.23878608">https://doi.org/10.5281/zenodo.23878608</a></p>
+<p>Data: © OpenStreetMap contributors (ODbL 1.0); Wikidata (CC0); Wikipedia (CC BY-SA 4.0); Natural Earth. Licence: text, figures and derived data CC BY 4.0, except data derived from OpenStreetMap, which is ODbL; code MIT.</p>
+<p>I wrote the text, with drafting and editing assistance from Claude (Anthropic), which also helped prepare the analysis code. I reviewed and checked all text and results.</p>
+</footer>
+</div>
+<div class="tip" id="tip"></div>
+<button class="btn theme" id="theme" aria-label="Toggle dark mode">◐</button>
+<script src="https://cdn.jsdelivr.net/npm/maplibre-gl@4.7.1/dist/maplibre-gl.js"></script>
+<script>
+const R = /*RESULTS*/;
+const SITE = /*SITE*/;
+const WORLD = /*WORLD*/;
+const CITIES = /*CITIES*/;
+const fmt = n => n == null || n === "" ? "n/a" : Math.round(n).toLocaleString("en-GB");
+const f1 = n => (+n).toFixed(1);
+const esc = s => String(s ?? "").replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
+const tip = document.getElementById("tip");
+function showTip(h, x, y) { tip.innerHTML = h; tip.style.display = "block"; const w = tip.offsetWidth; x = Math.max(w / 2 + 8, Math.min(innerWidth - w / 2 - 8, x)); tip.style.left = x + scrollX + "px"; tip.style.top = y + scrollY + "px"; }
+function hideTip() { tip.style.display = "none"; }
+document.addEventListener("click", hideTip);
+const NS = "http://www.w3.org/2000/svg";
+const el = (t, a, p) => { const e = document.createElementNS(NS, t); for (const k in a) e.setAttribute(k, a[k]); if (p) p.appendChild(e); return e; };
+const lbl = (svg, x, y, s, cls = "lab", anchor = "start") => { const t = el("text", { x, y, class: cls, "text-anchor": anchor }, svg); t.textContent = s; return t; };
+const redraws = [];
+function resp(box, render) { let last = 0; const go = force => { const w = Math.max(280, Math.round(box.clientWidth)); if (!force && Math.abs(w - last) < 4) return; last = w; box.innerHTML = ""; render(w, w < 560); }; new ResizeObserver(() => go()).observe(box); go(); redraws.push(() => go(true)); }
+const isDark = () => { const r = document.documentElement; return r.dataset.theme ? r.dataset.theme === "dark" : matchMedia("(prefers-color-scheme: dark)").matches; };
+const css = v => getComputedStyle(document.documentElement).getPropertyValue(v).trim();
+const small = () => innerWidth < 900;
+const FAMS = SITE.fams, FK = FAMS.map(f => f[0]), FN = FAMS.map(f => f[1]);
+const FC = () => isDark() ? ["#FF8048", "#7DA7E6", "#4FC3B0", "#C08AE6", "#B3AA9C"] : FAMS.map(f => f[2]);
+const TR = SITE.trads, TN = TR.map(t => t[0]), TCd = () => isDark() ? ["#7DA7E6", "#FF8048", "#4FC3B0", "#F07AB8", "#F0BE4A", "#9FB7D6", "#B3AA9C", "#6E6A63"] : TR.map(t => t[1]);
+const RELS = SITE.rels;   // [osm, name, fam, km_own, km_tree, iso, route, top, wikidata, distance_tag, n_kids, lon, lat, name_en, parent]
+const RIX = {}; RELS.forEach((r, i) => RIX[r[0]] = i);
+const KIDS = RELS.map(() => []); RELS.forEach((r, i) => { if (r[14] >= 0) KIDS[r[14]].push(i); });
+const SITES = SITE.sites;  // [lon, lat, label, iso, trad, from_name, qid, enwiki]
+const CNAME = SITE.cname;
+const SANT = SITE.santiago;
+const RN = r => r[1] || r[13] || "Unnamed relation " + r[0];
+const ROUTEKIND = r => ({ hiking: "walking route", foot: "walking route", bicycle: "cycle route", mtb: "mountain bike route", horse: "riding route" }[r[6]] || "route");
+
+/* hero mark: a scallop shell with its ribs converging, the Camino sign */
+(function () {
+  const g = document.getElementById("heroMark");
+  const cx = 60, cy = 98;
+  el("path", { d: "M16 62 C18 30 40 14 60 14 C80 14 102 30 104 62 C104 78 86 92 60 98 C34 92 16 78 16 62 Z", fill: "#F2B54E", stroke: "currentColor", "stroke-width": 3 }, g);
+  for (let k = 0; k < 9; k++) { const a = Math.PI * (0.12 + 0.76 * k / 8); el("path", { d: `M${cx} ${cy} L${cx - Math.cos(a) * 66} ${cy - Math.sin(a) * 78}`, stroke: "currentColor", "stroke-width": 2.2, opacity: .7 }, g); }
+  el("circle", { cx, cy, r: 5, fill: "#D2541B", stroke: "currentColor", "stroke-width": 2 }, g);
+})();
+
+/* ---------- state ---------- */
+const LYDEF = { relief: false, reliefK: 45, borders: true, cnames: true, cities: false, routes: true, sites: true, rings: false, width: 1.0 };
+const LY = { ...LYDEF };
+try { Object.assign(LY, JSON.parse(localStorage.getItem("pr_layers") || "{}")); } catch (e) {}
+const saveLY = () => { try { localStorage.setItem("pr_layers", JSON.stringify(LY)); } catch (e) {} };
+const S = { fams: new Set(FK.map((f, i) => i)), sel: null, selSite: null };
+let ROUTES = null, map = null, mapOK = false, popup = null, fallback = null;
+const ESRI = "https://server.arcgisonline.com/ArcGIS/rest/services/";
+const HOME = () => small() ? { center: [10, 51.5], zoom: 2.5 } : { center: [9, 51.5], zoom: 3.25 };
+
+/* ---------- route geometry ---------- */
+function decode(J) {
+  const feats = [], bbox = {};
+  for (const id in J.lines) {
+    const i = RIX[id]; if (i == null) continue; const f = RELS[i][2];
+    const lines = J.lines[id].map(flat => { const out = []; let x = 0, y = 0; for (let k = 0; k < flat.length; k += 2) { x += flat[k]; y += flat[k + 1]; out.push([x / J.scale, y / J.scale]); } return out; });
+    let b = [180, 90, -180, -90]; lines.forEach(l => l.forEach(([x, y]) => { if (x < b[0]) b[0] = x; if (y < b[1]) b[1] = y; if (x > b[2]) b[2] = x; if (y > b[3]) b[3] = y; }));
+    bbox[i] = b;
+    feats.push({ type: "Feature", properties: { i, f }, geometry: { type: "MultiLineString", coordinates: lines } });
+  }
+  return { type: "FeatureCollection", features: feats, bbox };
+}
+function relBox(i) {
+  const B = ROUTES ? ROUTES.bbox : {}; let b = null;
+  const walk = j => { const x = B[j]; if (x) b = b ? [Math.min(b[0], x[0]), Math.min(b[1], x[1]), Math.max(b[2], x[2]), Math.max(b[3], x[3])] : x.slice(); KIDS[j].forEach(walk); };
+  walk(i); return b;
+}
+function descSet(i) { const out = [i]; const walk = j => KIDS[j].forEach(k => { out.push(k); walk(k); }); walk(i); return out; }
+
+/* rings around Santiago */
+function ringGeo() {
+  const feats = [], labs = [];
+  for (let r = 500; r <= 3000; r += 500) {
+    const d = r / 6371, p0 = SANT[0] * Math.PI / 180, l0 = SANT[1] * Math.PI / 180, pts = [];
+    for (let k = 0; k <= 240; k++) { const b = 2 * Math.PI * k / 240; const p = Math.asin(Math.sin(p0) * Math.cos(d) + Math.cos(p0) * Math.sin(d) * Math.cos(b));
+      const l = l0 + Math.atan2(Math.sin(b) * Math.sin(d) * Math.cos(p0), Math.cos(d) - Math.sin(p0) * Math.sin(p)); pts.push([l * 180 / Math.PI, p * 180 / Math.PI]); }
+    feats.push({ type: "Feature", properties: { r }, geometry: { type: "LineString", coordinates: pts } });
+    labs.push([pts[Math.round(240 * 330 / 360)], r]);
+  }
+  return [{ type: "FeatureCollection", features: feats }, labs];
+}
+const [RINGS, RINGLAB] = ringGeo();
+
+/* ---------- MapLibre ---------- */
+function famFilter() { return ["in", ["get", "f"], ["literal", [...S.fams]]]; }
+function lineColor() { const c = FC(); return ["match", ["get", "f"], 0, c[0], 1, c[1], 2, c[2], 3, c[3], c[4]]; }
+function siteColor() { const c = TCd(); const e = ["match", ["get", "t"]]; c.forEach((x, k) => e.push(k, x)); e.push("#999"); return e; }
+function sitesGeo() { return { type: "FeatureCollection", features: SITES.map((s, j) => ({ type: "Feature", properties: { j, t: s[4] }, geometry: { type: "Point", coordinates: [s[0], s[1]] } })) }; }
+function initMap() {
+  const box = document.getElementById("map");
+  if (!window.maplibregl) return startFallback("The interactive map library could not load here, so this is a plain map drawn from Natural Earth outlines and the same route data.");
+  try {
+    map = new maplibregl.Map({ container: "map", ...HOME(), minZoom: 1, maxZoom: 14, attributionControl: false, dragRotate: false, pitchWithRotate: false, renderWorldCopies: false,
+      style: { version: 8, sources: {}, layers: [{ id: "bg", type: "background", paint: { "background-color": css("--sea") } }] } });
+  } catch (e) { return startFallback("This browser could not start the interactive map (it needs WebGL), so this is a plain map drawn from Natural Earth outlines and the same route data."); }
+  window.map = map;
+  map.touchZoomRotate.disableRotation();
+  map.addControl(new maplibregl.NavigationControl({ showCompass: false }), "bottom-right");
+  map.addControl(new maplibregl.AttributionControl({ compact: true, customAttribution: 'Routes &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors (ODbL) · Sites: Wikidata · Natural Earth' }), "bottom-left");
+  map.on("error", () => {});
+  map.on("load", () => {
+    mapOK = true;
+    const at = document.querySelector(".maplibregl-ctrl-attrib.maplibregl-compact"); if (at) { at.classList.remove("maplibregl-compact-show"); at.removeAttribute("open"); }
+    map.addSource("world", { type: "geojson", data: WORLD });
+    map.addSource("relief", { type: "raster", tiles: [ESRI + "World_Shaded_Relief/MapServer/tile/{z}/{y}/{x}"], tileSize: 256, maxzoom: 13, attribution: "Relief &copy; Esri" });
+    map.addSource("rings", { type: "geojson", data: RINGS });
+    map.addSource("routes", { type: "geojson", data: ROUTES || { type: "FeatureCollection", features: [] } });
+    map.addSource("sites", { type: "geojson", data: sitesGeo() });
+    map.addLayer({ id: "land", type: "fill", source: "world", paint: { "fill-color": css("--land") } });
+    map.addLayer({ id: "relief", type: "raster", source: "relief", layout: { visibility: "none" }, paint: { "raster-opacity": .45 } });
+    map.addLayer({ id: "borders", type: "line", source: "world", paint: { "line-color": css("--coast"), "line-width": ["interpolate", ["linear"], ["zoom"], 1, .4, 6, 1] } });
+    map.addLayer({ id: "rings", type: "line", source: "rings", layout: { visibility: "none" }, paint: { "line-color": css("--ring"), "line-width": 1, "line-dasharray": [4, 3] } });
+    map.addLayer({ id: "routes-hit", type: "line", source: "routes", paint: { "line-color": "#000", "line-opacity": 0, "line-width": 9 } });
+    map.addLayer({ id: "routes", type: "line", source: "routes", layout: { "line-cap": "round", "line-join": "round" }, paint: { "line-color": lineColor(), "line-width": widthExpr(1) } });
+    map.addLayer({ id: "routes-sel", type: "line", source: "routes", filter: ["in", ["get", "i"], ["literal", []]], layout: { "line-cap": "round", "line-join": "round" },
+      paint: { "line-color": isDark() ? "#FFFFFF" : "#111111", "line-width": widthExpr(2.6) } });
+    map.addLayer({ id: "sites", type: "circle", source: "sites", paint: { "circle-radius": ["interpolate", ["linear"], ["zoom"], 1, 1.5, 4, 2.4, 7, 4, 10, 6], "circle-color": siteColor(), "circle-opacity": .85,
+      "circle-stroke-color": isDark() ? "#13161B" : "#FFFFFF", "circle-stroke-width": .8 } });
+    map.addLayer({ id: "site-sel", type: "circle", source: "sites", filter: ["==", ["get", "j"], -1], paint: { "circle-radius": 9, "circle-color": "rgba(0,0,0,0)", "circle-stroke-color": isDark() ? "#fff" : "#111", "circle-stroke-width": 2.2 } });
+    applyLayers(); filters(); placeNames();
+    const hitLayers = () => ["sites", "routes-hit"].filter(l => map.getLayoutProperty(l, "visibility") !== "none");
+    map.on("mousemove", e => {
+      const f = map.queryRenderedFeatures(e.point, { layers: hitLayers() })[0];
+      map.getCanvas().style.cursor = f ? "pointer" : ""; if (!f) return hideTip();
+      const r = map.getContainer().getBoundingClientRect();
+      if (f.layer.id === "sites") { const s = SITES[f.properties.j]; showTip(`<b>${esc(s[2] || "Unnamed site")}</b><br>${esc(CNAME[s[3]] || "")} · ${esc(TN[s[4]])}`, r.left + e.point.x, r.top + e.point.y); }
+      else { const rr = RELS[f.properties.i]; showTip(`<b>${esc(RN(rr))}</b><br>${esc(FN[rr[2]])} · ${fmt(rr[3])} km`, r.left + e.point.x, r.top + e.point.y); }
+    });
+    map.on("mouseout", hideTip);
+    map.on("click", e => {
+      const f = map.queryRenderedFeatures(e.point, { layers: hitLayers() })[0]; hideTip(); if (!f) return;
+      if (f.layer.id === "sites") pickSite(f.properties.j, { fly: false });
+      else pickRoute(f.properties.i, { fly: false, ll: e.lngLat });
+    });
+    map.on("moveend", placeNames);
+  });
+  setTimeout(() => { if (!mapOK && !fallback) { try { map.remove(); } catch (e) {} map = null; window.map = null; startFallback("The interactive map did not start here, so this is a plain map drawn from Natural Earth outlines and the same route data."); } }, 9000);
+  layerControl();
+}
+function widthExpr(k) { const w = LY.width * k; return ["interpolate", ["linear"], ["zoom"], 2, .9 * w, 6, 1.8 * w, 10, 3 * w]; }
+function filters() {
+  if (mapOK) {
+    map.setFilter("routes", famFilter()); map.setFilter("routes-hit", famFilter());
+    map.setFilter("routes-sel", ["in", ["get", "i"], ["literal", S.sel == null ? [] : descSet(S.sel)]]);
+    map.setFilter("site-sel", ["==", ["get", "j"], S.selSite == null ? -1 : S.selSite]);
+    map.setPaintProperty("routes", "line-opacity", S.sel == null ? 1 : .55);
+  }
+  if (fallback) fallback.paint();
+}
+function applyLayers() {
+  if (mapOK) {
+    const vis = (id, on) => map.setLayoutProperty(id, "visibility", on ? "visible" : "none");
+    vis("relief", LY.relief); map.setPaintProperty("relief", "raster-opacity", Math.min(1, .1 + LY.reliefK / 110));
+    vis("borders", LY.borders); vis("rings", LY.rings);
+    ["routes", "routes-hit", "routes-sel"].forEach(l => vis(l, LY.routes)); vis("sites", LY.sites); vis("site-sel", LY.sites);
+    map.setPaintProperty("routes", "line-width", widthExpr(1)); map.setPaintProperty("routes-sel", "line-width", widthExpr(2.6));
+    placeNames();
+  }
+  if (fallback) fallback.paint();
+  pressShow();
+}
+let nameMarkers = [];
+function placeNames() {
+  nameMarkers.forEach(m => m.remove()); nameMarkers = [];
+  if (!mapOK) return;
+  const z = map.getZoom(), b = map.getBounds(), bxs = [];
+  const put = (lon, lat, html, cls, w, hgt, anchor = "center") => {
+    if (!b.contains([lon, lat])) return false; const pt = map.project([lon, lat]), cw = map.getContainer().clientWidth, ch = map.getContainer().clientHeight;
+    const bx = anchor === "left" ? [pt.x - 4, pt.y - hgt / 2, pt.x + w, pt.y + hgt / 2] : [pt.x - w / 2, pt.y - hgt / 2, pt.x + w / 2, pt.y + hgt / 2];
+    if (bx[0] < 2 || bx[2] > cw - 2 || bx[1] < 2 || bx[3] > ch - 2) return false;
+    if (bxs.some(o => bx[0] < o[2] && bx[2] > o[0] && bx[1] < o[3] && bx[3] > o[1])) return false; bxs.push(bx);
+    const d = document.createElement("div"); d.className = cls; d.innerHTML = html; nameMarkers.push(new maplibregl.Marker({ element: d, anchor }).setLngLat([lon, lat]).addTo(map)); return true;
+  };
+  [["Santiago", SANT], ["Rome", SITE.rome], ["Trondheim", SITE.nidaros]].forEach(([n, p]) => put(p[1], p[0], `★ ${n}`, "goalL", n.length * 8 + 18, 15));
+  if (LY.rings) RINGLAB.forEach(([p, r]) => put(p[0], p[1], `${r.toLocaleString("en-GB")} km`, "ringL", 64, 13));
+  if (LY.cnames && z >= 2.4) { const minPop = z < 3.2 ? 3e7 : z < 4 ? 8e6 : z < 5 ? 1.5e6 : 0; let n = 0;
+    Object.entries(SITE.cpos).sort((a, c) => c[1][2] - a[1][2]).forEach(([iso, m]) => { if (m[2] < minPop || n > 60) return; const nm = CNAME[iso] || ""; if (nm && put(m[0], m[1], esc(nm), "cntL", nm.length * 7.6, 13)) n++; }); }
+  if (LY.cities && z >= 3.4) { const minPop = z < 4.5 ? 2e6 : z < 5.5 ? 6e5 : z < 7 ? 2e5 : 0; let n = 0;
+    for (const c of CITIES) { if (c.pop < minPop) continue; if (put(c.lon, c.lat, `<i></i>${esc(c.name)}`, "cityL", 10 + c.name.length * 6.6, 14, "left")) n++; if (n > 45) break; } }
+}
+function layerControl() {
+  class Ctl { onAdd() { const d = document.createElement("div"); d.className = "maplibregl-ctrl lyr";
+    d.innerHTML = `<button class="lyrBtn" aria-expanded="false">Map layers</button>
+<div class="lyrPanel" hidden>
+ <div class="row"><label><input type="checkbox" data-k="routes"> Pilgrim routes</label><div class="sub"><span>width</span><input type="range" data-k="width" min=".5" max="2.5" step=".1" aria-label="Route line width"></div></div>
+ <div class="row"><label><input type="checkbox" data-k="sites"> Pilgrimage sites</label></div>
+ <div class="row"><label><input type="checkbox" data-k="rings"> Distance from Santiago</label></div>
+ <div class="hd">Base map</div>
+ <div class="row"><label><input type="checkbox" data-k="relief"> Relief (online tiles)</label><div class="sub"><span>strength</span><input type="range" data-k="reliefK" min="10" max="100" step="5" aria-label="Relief strength"></div></div>
+ <div class="row"><label><input type="checkbox" data-k="borders"> Borders and coasts</label></div>
+ <div class="row"><label><input type="checkbox" data-k="cnames"> Country names</label></div>
+ <div class="row"><label><input type="checkbox" data-k="cities"> City names</label></div>
+ <p class="sub" style="margin:4px 0 8px">The relief is an online layer; without it the plain map still works.</p>
+ <button class="reset">Reset layers</button>
+</div>`;
+    ["click", "dblclick", "mousedown", "touchstart", "wheel"].forEach(t => d.addEventListener(t, e => e.stopPropagation(), { passive: t !== "click" }));
+    const btn = d.querySelector(".lyrBtn"), pan = d.querySelector(".lyrPanel");
+    btn.onclick = () => { const o = pan.hidden; pan.hidden = !o; btn.setAttribute("aria-expanded", o); };
+    const sync = () => pan.querySelectorAll("[data-k]").forEach(i => { const k = i.dataset.k; if (i.type === "checkbox") i.checked = LY[k]; else i.value = LY[k]; });
+    pan.querySelectorAll("[data-k]").forEach(i => i.addEventListener(i.type === "range" ? "input" : "change", () => { const k = i.dataset.k; LY[k] = i.type === "checkbox" ? i.checked : +i.value; if (k === "reliefK") LY.relief = true; sync(); saveLY(); applyLayers(); }));
+    pan.querySelector(".reset").onclick = () => { Object.assign(LY, LYDEF); saveLY(); sync(); applyLayers(); };
+    window.syncLayers = sync; sync(); return d; } onRemove() {} }
+  map.addControl(new Ctl(), "top-left");
+}
+function retheme() {
+  if (mapOK) {
+    map.setPaintProperty("bg", "background-color", css("--sea")); map.setPaintProperty("land", "fill-color", css("--land"));
+    map.setPaintProperty("borders", "line-color", css("--coast")); map.setPaintProperty("rings", "line-color", css("--ring"));
+    map.setPaintProperty("routes", "line-color", lineColor()); map.setPaintProperty("sites", "circle-color", siteColor());
+    map.setPaintProperty("sites", "circle-stroke-color", isDark() ? "#13161B" : "#FFFFFF");
+    map.setPaintProperty("routes-sel", "line-color", isDark() ? "#FFFFFF" : "#111111"); map.setPaintProperty("site-sel", "circle-stroke-color", isDark() ? "#fff" : "#111");
+  }
+  if (fallback) fallback.paint();
+  legend(); famRow();
+}
+
+/* ---------- fallback: a plain canvas map of the same data ---------- */
+function startFallback(msg) {
+  const box = document.getElementById("map"); box.innerHTML = "";
+  const cv = document.createElement("canvas"); cv.style.width = "100%"; cv.style.height = "100%"; cv.style.display = "block"; box.appendChild(cv);
+  box.insertAdjacentHTML("beforeend", `<div class="mapfail">${esc(msg)}</div><div class="fbbar"><button class="btn" data-v="eu" aria-pressed="true">Europe</button><button class="btn" data-v="world" aria-pressed="false">World</button></div>`);
+  let view = "eu";
+  const V = { eu: [-11, 33, 32, 64], world: [-170, -58, 180, 78] };
+  box.querySelectorAll(".fbbar .btn").forEach(b => b.onclick = () => { view = b.dataset.v; box.querySelectorAll(".fbbar .btn").forEach(x => x.setAttribute("aria-pressed", x === b)); fallback.paint(); });
+  fallback = { paint() {
+    const W = box.clientWidth, H = box.clientHeight, dpr = devicePixelRatio || 1; cv.width = W * dpr; cv.height = H * dpr;
+    const c = cv.getContext("2d"); c.setTransform(dpr, 0, 0, dpr, 0, 0);
+    const [x0, y0, x1, y1] = V[view], my = (y0 + y1) / 2, kx = Math.cos(my * Math.PI / 180);
+    const s = Math.min(W / ((x1 - x0) * kx), H / (y1 - y0)), ox = (W - (x1 - x0) * kx * s) / 2, oy = (H - (y1 - y0) * s) / 2;
+    const P = (lon, lat) => [ox + (lon - x0) * kx * s, oy + (y1 - lat) * s];
+    c.fillStyle = css("--sea"); c.fillRect(0, 0, W, H);
+    c.fillStyle = css("--land"); c.strokeStyle = css("--coast"); c.lineWidth = .6;
+    WORLD.features.forEach(f => { const polys = f.geometry.type === "Polygon" ? [f.geometry.coordinates] : f.geometry.coordinates;
+      polys.forEach(p => { c.beginPath(); p[0].forEach(([x, y], k) => { const [a, b] = P(x, y); k ? c.lineTo(a, b) : c.moveTo(a, b); }); c.closePath(); c.fill(); if (LY.borders) c.stroke(); }); });
+    if (LY.rings) { c.strokeStyle = css("--ring"); c.setLineDash([4, 3]); RINGS.features.forEach(f => { c.beginPath(); f.geometry.coordinates.forEach(([x, y], k) => { const [a, b] = P(x, y); k ? c.lineTo(a, b) : c.moveTo(a, b); }); c.stroke(); }); c.setLineDash([]); }
+    if (LY.routes && ROUTES) { const col = FC(); c.lineWidth = Math.max(.8, LY.width * (view === "eu" ? 1.1 : .8)); c.lineCap = "round";
+      [4, 3, 2, 1, 0].forEach(fi => { if (!S.fams.has(fi)) return; c.strokeStyle = col[fi]; c.beginPath();
+        ROUTES.features.forEach(f => { if (f.properties.f !== fi) return; f.geometry.coordinates.forEach(l => l.forEach(([x, y], k) => { const [a, b] = P(x, y); k ? c.lineTo(a, b) : c.moveTo(a, b); })); }); c.stroke(); });
+      if (S.sel != null) { const ds = new Set(descSet(S.sel)); c.strokeStyle = isDark() ? "#fff" : "#111"; c.lineWidth = 2.6; c.beginPath();
+        ROUTES.features.forEach(f => { if (!ds.has(f.properties.i)) return; f.geometry.coordinates.forEach(l => l.forEach(([x, y], k) => { const [a, b] = P(x, y); k ? c.lineTo(a, b) : c.moveTo(a, b); })); }); c.stroke(); } }
+    if (LY.sites) { const tc = TCd(); SITES.forEach((st, j) => { const [a, b] = P(st[0], st[1]); c.beginPath(); c.arc(a, b, j === S.selSite ? 5 : (view === "eu" ? 1.8 : 2.2), 0, 7); c.fillStyle = tc[st[4]]; c.fill(); c.lineWidth = .6; c.strokeStyle = isDark() ? "#13161B" : "#fff"; c.stroke(); }); }
+    const [sa, sb] = P(SANT[1], SANT[0]); c.fillStyle = css("--hot"); c.font = "600 13px IBM Plex Mono, monospace"; c.fillText("★ Santiago", sa - 6, sb + 4);
+  } };
+  window.fallback = fallback; new ResizeObserver(() => fallback.paint()).observe(box); fallback.paint();
+}
+
+/* ---------- selection ---------- */
+function flyBox(b) {
+  if (!b) return;
+  if (mapOK) map.fitBounds([[b[0], b[1]], [b[2], b[3]]], { padding: small() ? 24 : 50, maxZoom: 9, duration: 1200 });
+}
+function toMap() { if (small()) document.getElementById("map").scrollIntoView({ behavior: "smooth", block: "start" }); }
+function pickRoute(i, o = {}) {
+  S.sel = i; S.selSite = null; const r = RELS[i];
+  if (!S.fams.has(r[2])) { S.fams.add(r[2]); famRow(); }
+  filters(); side();
+  if (o.fly) { flyBox(relBox(i)); toMap(); }
+}
+function pickSite(j, o = {}) {
+  S.selSite = j; S.sel = null; const s = SITES[j]; filters(); side();
+  if (o.fly) { if (mapOK) map.flyTo({ center: [s[0], s[1]], zoom: 8, speed: 1.4 }); toMap(); }
+  if (mapOK) { if (popup) popup.remove(); popup = new maplibregl.Popup({ offset: 8, maxWidth: "290px" }).setLngLat([s[0], s[1]]).setHTML(sitePop(s)).addTo(map); }
+}
+function sitePop(s) {
+  return `<b class="t">${esc(s[2] || "Unnamed site")}</b><div class="al">${esc(CNAME[s[3]] || "")}</div>${esc(TN[s[4]])}${s[5] ? " (from the name)" : TN[s[4]] === "Not recorded" ? "" : " (Wikidata)"}<br>
+<a href="https://www.wikidata.org/wiki/${esc(s[6])}" target="_blank" rel="noopener">Wikidata ${esc(s[6])}</a>${s[7] ? ` · <a href="https://en.wikipedia.org/wiki/${esc(s[7])}" target="_blank" rel="noopener">Wikipedia</a>` : ""}`;
+}
+function unpick() { S.sel = null; S.selSite = null; if (popup) popup.remove(); filters(); side(); }
+function side() {
+  const d = document.getElementById("side");
+  if (S.sel != null) {
+    const r = RELS[S.sel], top = r[7] >= 0 ? RELS[r[7]] : null, par = r[14] >= 0 ? RELS[r[14]] : null, kids = KIDS[S.sel];
+    d.innerHTML = `<button class="back">Back to overview</button><h4>${esc(FN[r[2]])} · ${esc(ROUTEKIND(r))}</h4><div class="big">${esc(RN(r))}</div>
+<div class="sub">${r[13] ? esc(r[13]) + "<br>" : ""}${esc(CNAME[r[5]] || "")}</div>
+<table><tr><td>Mapped length</td><td class="num">${fmt(r[10] ? r[4] : r[3])} km</td></tr>
+${r[10] ? `<tr><td>Stages and branches</td><td class="num">${r[10]}</td></tr>` : ""}
+${r[9] ? `<tr><td>Length in its tag</td><td class="num">${esc(r[9])}${/km/.test(r[9]) ? "" : " km"}</td></tr>` : ""}
+${par ? `<tr><td>Part of</td><td class="nm"><span class="go" data-r="${r[14]}">${esc(RN(par))}</span></td></tr>` : ""}
+${top && top !== par ? `<tr><td>Within</td><td class="nm"><span class="go" data-r="${r[7]}">${esc(RN(top))}</span></td></tr>` : ""}</table>
+${kids.length ? `<h4>Stages and branches</h4><table>${kids.slice(0, 40).map(k => `<tr><td><span class="go" data-r="${k}">${esc(RN(RELS[k]))}</span></td><td class="num">${fmt(RELS[k][10] ? RELS[k][4] : RELS[k][3])} km</td></tr>`).join("")}</table>${kids.length > 40 ? `<div class="sub">and ${kids.length - 40} more</div>` : ""}` : ""}
+<p class="sub">Kilometres count each stretch once. <a href="https://www.openstreetmap.org/relation/${esc(r[0])}" target="_blank" rel="noopener">OpenStreetMap relation ${esc(r[0])}</a>${r[8] ? ` · <a href="https://www.wikidata.org/wiki/${esc(r[8])}" target="_blank" rel="noopener">Wikidata</a>` : ""}</p>`;
+  } else if (S.selSite != null) {
+    const s = SITES[S.selSite];
+    d.innerHTML = `<button class="back">Back to overview</button><h4>Pilgrimage site</h4><div class="big">${esc(s[2] || "Unnamed site")}</div><div class="sub">${esc(CNAME[s[3]] || "")}</div>${sitePop(s).replace(/<b class="t">.*?<\/b><div class="al">.*?<\/div>/, "")}
+<h4>Other sites in ${esc(CNAME[s[3]] || "")}</h4><p>${fmt(R.sites.by_iso[s[3]] || 0)} in Wikidata.</p>`;
+  } else {
+    const tot = R.total.km;
+    d.innerHTML = `<h4>All mapped pilgrim routes</h4><div class="big">${fmt(tot)} km</div><div class="sub">in ${R.total.n_countries} countries, each stretch counted once</div>
+<h4>By family</h4><table>${FK.map((f, i) => `<tr><td>${esc(FN[i])}<div class="bar" style="width:${(100 * R.fam[f].km / R.fam.camino.km).toFixed(1)}%;background:${FC()[i]}"></div></td><td class="num">${fmt(R.fam[f].km)} km</td></tr>`).join("")}</table>
+<h4>Most route km</h4><table>${R.total.countries.slice(0, 8).map(c => `<tr><td><span class="go" data-c="${c.iso}">${esc(c.name)}</span></td><td class="num">${fmt(c.km)} km</td></tr>`).join("")}</table>
+<p class="sub">Click a line for its route, stages and length; click a dot for a shrine or temple. ${fmt(R.sites.n)} sites from Wikidata.</p>`;
+  }
+  d.querySelectorAll(".back").forEach(b => b.onclick = unpick);
+  d.querySelectorAll("[data-r]").forEach(g => g.onclick = () => pickRoute(+g.dataset.r, { fly: true }));
+  d.querySelectorAll("[data-c]").forEach(g => g.onclick = () => flyCountry(g.dataset.c));
+}
+function flyCountry(iso) {
+  const f = WORLD.features.filter(x => x.properties.iso === iso); if (!f.length) return;
+  let b = [180, 90, -180, -90]; f.forEach(x => (x.geometry.type === "Polygon" ? [x.geometry.coordinates] : x.geometry.coordinates).forEach(p => p[0].forEach(([a, c]) => { b = [Math.min(b[0], a), Math.min(b[1], c), Math.max(b[2], a), Math.max(b[3], c)]; })));
+  if (iso === "FRA") b = [-5, 42, 8.5, 51.2]; if (iso === "NOR") b = [4.5, 57.8, 16, 65]; if (iso === "PRT") b = [-9.6, 36.9, -6.1, 42.2]; if (iso === "ESP") b = [-9.5, 35.9, 3.4, 43.9];
+  flyBox(b); toMap();
+}
+
+/* ---------- control rows ---------- */
+function famRow() {
+  const row = document.getElementById("famRow"); row.querySelectorAll(".btn").forEach(b => b.remove()); const c = FC();
+  FK.forEach((f, i) => { const b = document.createElement("button"); b.className = "btn"; b.setAttribute("aria-pressed", S.fams.has(i)); b.innerHTML = `<i style="background:${c[i]}"></i>${esc(FN[i])}`;
+    b.onclick = () => { if (S.fams.has(i) && S.fams.size === FK.length) { S.fams = new Set([i]); } else if (S.fams.has(i)) { S.fams.delete(i); if (!S.fams.size) S.fams = new Set(FK.map((x, k) => k)); } else S.fams.add(i); famRow(); filters(); legend(); };
+    row.appendChild(b); });
+}
+function pressShow() { document.querySelectorAll("#showRow .btn").forEach(b => b.setAttribute("aria-pressed", !!LY[b.dataset.k])); if (window.syncLayers) window.syncLayers(); }
+(function showRow() {
+  const row = document.getElementById("showRow");
+  [["routes", "Routes"], ["sites", "Sites"], ["rings", "Distance from Santiago"]].forEach(([k, t]) => { const b = document.createElement("button"); b.className = "btn"; b.dataset.k = k; b.textContent = t;
+    b.onclick = () => { LY[k] = !LY[k]; saveLY(); applyLayers(); }; row.appendChild(b); });
+  const fr = document.getElementById("focusRow");
+  const FOC = [["Europe", null], ["Santiago", [-9.4, 41.6, -6.8, 43.8]], ["Germany", "DEU"], ["Poland", "POL"], ["Via Francigena", "r:" + RELS.findIndex(r => r[0] === "11860709")], ["Trondheim", [5, 58.5, 17.5, 64.6]], ["Hungary", "HUN"], ["Shikoku", [131.9, 32.6, 134.9, 34.6]], ["World", "w"]];
+  FOC.forEach(([t, v]) => { const b = document.createElement("button"); b.className = "btn"; b.textContent = t; b.onclick = () => {
+    if (v === null) { if (mapOK) map.flyTo({ ...HOME(), speed: 1.4 }); unpick(); }
+    else if (v === "w") { if (mapOK) map.flyTo({ center: [20, 25], zoom: small() ? .9 : 1.4, speed: 1.4 }); }
+    else if (Array.isArray(v)) { flyBox(v); toMap(); }
+    else if (v.startsWith("r:")) pickRoute(+v.slice(2), { fly: true });
+    else flyCountry(v); }; fr.appendChild(b); });
+  pressShow();
+})();
+function legend() {
+  const c = FC(), t = TCd();
+  document.getElementById("legend").innerHTML = FK.map((f, i) => S.fams.has(i) ? `<span><i style="background:${c[i]}"></i>${esc(FN[i])}</span>` : "").join("") +
+    TN.map((n, k) => R.sites.trad[n] ? `<span><i class="dot" style="background:${t[k]}"></i>${esc(n)} site</span>` : "").join("") + `<span><i style="background:none;border-top:2px dashed ${css("--ring")};height:0"></i>500 km rings from Santiago</span>`;
+}
+
+/* ---------- search ---------- */
+(function search() {
+  const q = document.getElementById("q"), sug = document.getElementById("sug"); let items = [], k = -1;
+  const idx = [];
+  RELS.forEach((r, i) => idx.push({ t: "r", i, s: (RN(r) + " " + (r[13] || "")).toLowerCase(), label: RN(r), sub: `${FN[r[2]]} · ${fmt(r[10] ? r[4] : r[3])} km` }));
+  SITES.forEach((s, j) => { if (s[2]) idx.push({ t: "s", i: j, s: s[2].toLowerCase(), label: s[2], sub: `site · ${CNAME[s[3]] || ""}` }); });
+  Object.entries(CNAME).forEach(([iso, n]) => { if (WORLD.features.some(f => f.properties.iso === iso)) idx.push({ t: "c", i: iso, s: n.toLowerCase(), label: n, sub: "country" }); });
+  const norm = s => s.normalize("NFD").replace(/[̀-ͯ]/g, "");
+  idx.forEach(o => o.n = norm(o.s));
+  const run = () => { const v = norm(q.value.trim().toLowerCase()); if (v.length < 2) { sug.style.display = "none"; return; }
+    items = idx.filter(o => o.n.includes(v)).sort((a, b) => (a.n.startsWith(v) ? 0 : 1) - (b.n.startsWith(v) ? 0 : 1) || (a.t === "c" ? -1 : 0) - (b.t === "c" ? -1 : 0) || a.label.length - b.label.length).slice(0, 12); k = -1;
+    sug.innerHTML = items.map((o, n) => `<li role="option" data-n="${n}">${esc(o.label)} <span>${esc(o.sub)}</span></li>`).join(""); sug.style.display = items.length ? "block" : "none";
+    sug.querySelectorAll("li").forEach(li => li.onclick = () => go(items[+li.dataset.n])); };
+  const go = o => { if (!o) return; sug.style.display = "none"; q.value = o.label; if (o.t === "r") pickRoute(o.i, { fly: true }); else if (o.t === "s") pickSite(o.i, { fly: true }); else flyCountry(o.i); };
+  q.addEventListener("input", run);
+  q.addEventListener("keydown", e => { if (e.key === "ArrowDown" || e.key === "ArrowUp") { e.preventDefault(); k = Math.max(0, Math.min(items.length - 1, k + (e.key === "ArrowDown" ? 1 : -1))); sug.querySelectorAll("li").forEach((li, n) => li.setAttribute("aria-selected", n === k)); }
+    else if (e.key === "Enter") { e.preventDefault(); run(); go(items[k >= 0 ? k : 0]); } else if (e.key === "Escape") sug.style.display = "none"; });
+  document.addEventListener("click", e => { if (!e.target.closest(".searchbox")) sug.style.display = "none"; });
+})();
+
+/* ---------- charts ---------- */
+function hbars(box, rows, o) {   // rows: {label, v, col, tip, click}
+  resp(box, (w, sm) => {
+    const lw = Math.min(o.lw || 170, w * .36), rh = 24, h = rows.length * rh + 8, svg = el("svg", { viewBox: `0 0 ${w} ${h}`, role: "img", "aria-label": o.aria }, box);
+    const mx = Math.max(...rows.map(r => r.v)), bw = w - lw - (sm ? 90 : 120);
+    rows.forEach((r, k) => { const y = 4 + k * rh, g = el("g", { style: r.click ? "cursor:pointer" : "" }, svg);
+      lbl(g, lw - 8, y + 15, r.label, "lab", "end");
+      el("rect", { x: lw, y: y + 3, width: Math.max(1, bw * r.v / mx), height: rh - 8, fill: r.col, rx: 1.5 }, g);
+      lbl(g, lw + bw * r.v / mx + 6, y + 15, r.text, "lab m");
+      el("rect", { x: 0, y, width: w, height: rh, fill: "transparent" }, g);
+      g.addEventListener("mousemove", e => showTip(r.tip, e.pageX - scrollX, e.pageY - scrollY)); g.addEventListener("mouseleave", hideTip);
+      if (r.click) g.addEventListener("click", e => { e.stopPropagation(); r.click(); }); });
+  });
+}
+function charts() {
+  const cc = R.fam.camino.countries.filter(c => c.iso !== "SEA").slice(0, 14);
+  hbars(document.getElementById("caminoChart"), cc.map(c => ({ label: c.name, v: c.km, col: c.iso === "DEU" ? css("--hot") : c.iso === "ESP" ? css("--cool") : "#C9A27E", text: `${fmt(c.km)} km`,
+    tip: `<b>${esc(c.name)}</b><br>${fmt(c.km)} km of waymarked Camino, ${f1(c.pct)}% of the total`, click: () => flyCountry(c.iso) })), { aria: "Camino kilometres by country", lw: 120 });
+  hbars(document.getElementById("famChart"), FK.map((f, i) => ({ label: FN[i], v: R.fam[f].km, col: FC()[i], text: `${fmt(R.fam[f].km)} km`,
+    tip: `<b>${esc(FN[i])}</b><br>${fmt(R.fam[f].km)} km in ${R.fam[f].n_countries} countries, ${R.fam[f].relations} relations<br>Most in ${esc(R.fam[f].countries[0].name)} (${fmt(R.fam[f].countries[0].km)} km)`,
+    click: () => { S.fams = new Set([i]); famRow(); filters(); legend(); toMap(); } })), { aria: "Kilometres by route family", lw: 190 });
+  const B = R.bands;
+  resp(document.getElementById("bandChart"), (w, sm) => {
+    const h = 260, ml = 6, mb = 64, bw = (w - ml * 2) / B.length, mx = Math.max(...B.map(b => b.km)), svg = el("svg", { viewBox: `0 0 ${w} ${h}`, role: "img", "aria-label": "Camino kilometres by distance from Santiago" }, document.getElementById("bandChart"));
+    const y = v => h - mb - (h - mb - 34) * v / mx;
+    B.forEach((b, k) => { const x = ml + k * bw, g = el("g", {}, svg);
+      el("rect", { x: x + bw * .14, y: y(b.km), width: bw * .72, height: h - mb - y(b.km), fill: b.km === mx ? css("--hot") : "#C9A27E" }, g);
+      lbl(g, x + bw / 2, y(b.km) - 6, sm ? `${Math.round(b.pct)}%` : `${fmt(b.km)} km`, "lab", "middle");
+      lbl(g, x + bw / 2, h - mb + 16, w < 820 ? b.band.replace(" km", "").replace(/,000/g, "k").replace(/,500/g, ".5k").replace(/^(\d)(\d\d) /, "$1$2 ").replace(" to ", w < 560 ? "-" : " to ") : b.band.replace(" km", ""), "lab s", "middle");
+      if (!sm && b.top[0]) lbl(g, x + bw / 2, h - mb + 32, b.top[0][0], "lab s m", "middle");
+      el("rect", { x, y: 0, width: bw, height: h, fill: "transparent" }, g);
+      g.addEventListener("mousemove", e => showTip(`<b>${esc(b.band)} from Santiago</b><br>${fmt(b.km)} km of Camino, ${f1(b.pct)}%<br>${b.top.map(t => `${esc(t[0])} ${fmt(t[1])} km`).join("<br>")}`, e.pageX - scrollX, e.pageY - scrollY));
+      g.addEventListener("mouseleave", hideTip); });
+    el("line", { x1: 0, x2: w, y1: h - mb, y2: h - mb, stroke: css("--muted") }, svg);
+    lbl(svg, w / 2, h - 6, "straight line distance from the cathedral, km", "lab s m", "middle");
+  });
+  const tb = document.getElementById("longTable");
+  tb.innerHTML = `<tr><th>Route system</th><th>Family</th><th class="r">Mapped km</th><th class="r">Tag</th><th>Countries</th></tr>` + R.longest.map((l, k) => { const i = RIX[l.id];
+    return `<tr data-i="${i}"><td>${esc(l.name)}</td><td><i style="background:${FC()[FK.indexOf(l.fam)]}"></i>${esc(l.family)}</td><td class="r">${fmt(l.km)}</td><td class="r">${l.distance_tag ? esc(l.distance_tag) : ""}</td><td>${esc(l.countries.join(", "))}</td></tr>`; }).join("");
+  tb.querySelectorAll("tr[data-i]").forEach(t => t.onclick = () => pickRoute(+t.dataset.i, { fly: true }));
+  siteChart("n");
+  document.querySelectorAll("#siteMode .btn").forEach(b => b.onclick = () => { document.querySelectorAll("#siteMode .btn").forEach(x => x.setAttribute("aria-pressed", x === b)); siteChart(b.dataset.m); });
+  // tradition
+  resp(document.getElementById("tradChart"), (w, sm) => {
+    const rows = [["Recorded", R.sites.rec], ["Recorded or from name", R.sites.trad]], h = 96, lw = sm ? 0 : 170, svg = el("svg", { viewBox: `0 0 ${w} ${h}`, role: "img", "aria-label": "Religious tradition of the sites" }, document.getElementById("tradChart"));
+    const tc = TCd();
+    rows.forEach(([nm, d], k) => { const y = 8 + k * 44; let x = lw; const bw = w - lw - 4;
+      if (sm) lbl(svg, 0, y - 1, nm, "lab s m"); else lbl(svg, lw - 8, y + 19, nm, "lab", "end");
+      TN.forEach((t, j) => { const v = d[t] || 0; if (!v) return; const ww = bw * v / R.sites.n, g = el("g", {}, svg);
+        el("rect", { x, y: y + (sm ? 3 : 4), width: ww, height: 24, fill: tc[j], stroke: css("--bg"), "stroke-width": 1 }, g);
+        if (ww > 46) lbl(g, x + 5, y + (sm ? 19 : 20), fmt(v), "lab s").setAttribute("style", "fill:#fff");
+        g.addEventListener("mousemove", e => showTip(`<b>${esc(t)}</b><br>${fmt(v)} sites (${f1(100 * v / R.sites.n)}%)<br>${esc(nm.toLowerCase())}`, e.pageX - scrollX, e.pageY - scrollY)); g.addEventListener("mouseleave", hideTip);
+        x += ww; }); });
+  });
+  document.getElementById("tradLegend").innerHTML = TN.map((n, k) => R.sites.trad[n] || R.sites.rec[n] ? `<span><i class="dot" style="background:${TCd()[k]}"></i>${esc(n)}</span>` : "").join("");
+  // compostela
+  resp(document.getElementById("compChart"), (w, sm) => {
+    const Y = R.compostela.years, h = 250, ml = sm ? 34 : 50, mb = 26, mx = 560000, svg = el("svg", { viewBox: `0 0 ${w} ${h}`, role: "img", "aria-label": "Compostela certificates per year" }, document.getElementById("compChart"));
+    const bw = (w - ml - 18) / Y.length, y = v => h - mb - (h - mb - 14) * v / mx;
+    [0, 100000, 200000, 300000, 400000, 500000].forEach(v => { el("line", { x1: ml, x2: w, y1: y(v), y2: y(v), stroke: css("--rule") }, svg); lbl(svg, ml - 6, y(v) + 4, v ? (v / 1000) + "k" : "0", "lab s m", "end"); });
+    Y.forEach(([yr, v], k) => { const x = ml + k * bw, holy = new Date(Date.UTC(yr, 6, 25)).getUTCDay() === 0, g = el("g", {}, svg);
+      el("rect", { x: x + bw * .1, y: y(v), width: bw * .8, height: h - mb - y(v), fill: holy ? css("--gold") : "#C9A27E" }, g);
+      if (yr % 5 === 0) lbl(g, x + bw / 2, h - 8, String(yr), "lab s m", "middle");
+      el("rect", { x, y: 0, width: bw, height: h, fill: "transparent" }, g);
+      g.addEventListener("mousemove", e => showTip(`<b>${yr}</b>${holy ? " · Holy Year" : ""}<br>${fmt(v)} certificates`, e.pageX - scrollX, e.pageY - scrollY)); g.addEventListener("mouseleave", hideTip); });
+  });
+}
+function siteChart(m) {
+  const box = document.getElementById("siteChart");
+  const rows = m === "n" ? R.sites.top.slice(0, 14).map(c => ({ c, v: c.n, text: fmt(c.n) })) : R.sites.dens.map(c => ({ c, v: c.per_m, text: f1(c.per_m) }));
+  box.innerHTML = ""; redraws.length = redraws.length;
+  hbars(box, rows.map(r => ({ label: r.c.name, v: r.v, col: m === "n" ? css("--cool") : css("--hot"), text: r.text,
+    tip: `<b>${esc(r.c.name)}</b><br>${fmt(r.c.n)} pilgrimage sites${r.c.per_m != null ? `, ${f1(r.c.per_m)} per million people` : ""}`, click: () => flyCountry(r.c.iso) })), { aria: "Pilgrimage sites by country", lw: 130 });
+}
+
+/* ---------- theme and start ---------- */
+document.getElementById("theme").onclick = () => { const r = document.documentElement; r.dataset.theme = isDark() ? "light" : "dark"; retheme(); redraws.forEach(f => f()); document.getElementById("tradLegend").innerHTML = TN.map((n, k) => R.sites.trad[n] || R.sites.rec[n] ? `<span><i class="dot" style="background:${TCd()[k]}"></i>${esc(n)}</span>` : "").join(""); };
+famRow(); legend(); side(); charts(); initMap();
+fetch("data/routes.json").then(r => r.json()).then(J => { ROUTES = decode(J); window.ROUTES = ROUTES; if (mapOK) map.getSource("routes").setData(ROUTES); else { const t = setInterval(() => { if (mapOK) { map.getSource("routes").setData(ROUTES); clearInterval(t); } }, 300); setTimeout(() => clearInterval(t), 20000); } if (fallback) fallback.paint(); })
+  .catch(() => { const m = document.getElementById("map"); m.insertAdjacentHTML("beforeend", '<div class="mapfail">The route lines (data/routes.json) could not be loaded here; the sites and charts still work.</div>'); });
+</script>
+/*FULLSCREEN*/
+</body>
+</html>

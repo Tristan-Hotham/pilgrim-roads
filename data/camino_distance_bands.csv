@@ -1,0 +1,8 @@
+distance_band,km_camino,pct,top_countries
+0 to 250 km,2243,5.38,Spain 1927; Portugal 316
+250 to 500 km,3135,7.52,Spain 2734; Portugal 401
+"500 to 1,000 km",5601,13.44,Spain 5076; France 299; Portugal 226
+"1,000 to 1,500 km",4564,10.95,Germany 3242; Switzerland 449; Italy 368
+"1,500 to 2,000 km",17125,41.09,Germany 11131; Austria 1625; Croatia 1037
+"2,000 to 2,500 km",8004,19.21,Poland 4715; Slovakia 707; Hungary 579
+"2,500 to 3,000 km",1003,2.41,Poland 529; Ukraine 440; Russia 32

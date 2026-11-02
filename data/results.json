@@ -1,0 +1,2138 @@
+{
+ "source": {
+  "ids_requested": 2028,
+  "failed_batches": 5,
+  "ids_failed": 100,
+  "failed_pct": 4.93,
+  "fetched": 1906,
+  "kept": 1893,
+  "dropped": 13,
+  "dropped_list": {
+   "153968": "type=network",
+   "2812858": "a short park walk in Canberra named Pilgrim Walk, with no pilgrimage tag",
+   "2827464": "type=network",
+   "3235848": "type=network",
+   "4071980": "route=road",
+   "9182185": "a running and walking route in York named after St Olave's church",
+   "9379732": "a proposed recreational rail trail in Texas, tagged pilgrimage by mistake",
+   "11006563": "route=fitness_trail",
+   "12871304": "route=bus",
+   "17326168": "an ecological trail in a Colombian paramo, tagged pilgrimage by mistake",
+   "17571428": "an ecological trail in a Colombian paramo, tagged pilgrimage by mistake",
+   "19854819": "a forest trail named after the Pilgrim River (Michigan), not a pilgrimage route",
+   "20407158": "route=piste"
+  },
+  "containers": 124,
+  "superroutes": 63,
+  "leaves": 1769,
+  "subrels_listed": 1039,
+  "subrels_missing": 280,
+  "containers_all_missing": 17,
+  "empty": 2,
+  "ways": 341659,
+  "points": 1060346,
+  "seg_raw": 671288,
+  "seg_unique": 626144,
+  "km_raw": 83037,
+  "km": 77804,
+  "km_dup": 5234,
+  "dup_pct": 6.3,
+  "km_no_country": 77,
+  "osm_year": "2026",
+  "with_pilgrimage_tag": 1704,
+  "with_wikidata": 368,
+  "site_rows": 1403,
+  "site_items": 1330
+ },
+ "total": {
+  "km": 77804,
+  "n_countries": 34,
+  "countries": [
+   {
+    "iso": "DEU",
+    "name": "Germany",
+    "km": 21446,
+    "pct": 27.56
+   },
+   {
+    "iso": "ESP",
+    "name": "Spain",
+    "km": 10367,
+    "pct": 13.32
+   },
+   {
+    "iso": "ITA",
+    "name": "Italy",
+    "km": 10127,
+    "pct": 13.02
+   },
+   {
+    "iso": "POL",
+    "name": "Poland",
+    "km": 5616,
+    "pct": 7.22
+   },
+   {
+    "iso": "HUN",
+    "name": "Hungary",
+    "km": 4678,
+    "pct": 6.01
+   },
+   {
+    "iso": "AUT",
+    "name": "Austria",
+    "km": 4626,
+    "pct": 5.95
+   },
+   {
+    "iso": "FRA",
+    "name": "France",
+    "km": 2825,
+    "pct": 3.63
+   },
+   {
+    "iso": "SWE",
+    "name": "Sweden",
+    "km": 2268,
+    "pct": 2.92
+   },
+   {
+    "iso": "NOR",
+    "name": "Norway",
+    "km": 2052,
+    "pct": 2.64
+   },
+   {
+    "iso": "CZE",
+    "name": "Czechia",
+    "km": 1829,
+    "pct": 2.35
+   },
+   {
+    "iso": "PRT",
+    "name": "Portugal",
+    "km": 1689,
+    "pct": 2.17
+   },
+   {
+    "iso": "HRV",
+    "name": "Croatia",
+    "km": 1526,
+    "pct": 1.96
+   },
+   {
+    "iso": "SVK",
+    "name": "Slovakia",
+    "km": 1168,
+    "pct": 1.5
+   },
+   {
+    "iso": "DNK",
+    "name": "Denmark",
+    "km": 1137,
+    "pct": 1.46
+   },
+   {
+    "iso": "GBR",
+    "name": "United Kingdom",
+    "km": 1084,
+    "pct": 1.39
+   },
+   {
+    "iso": "ROU",
+    "name": "Romania",
+    "km": 1056,
+    "pct": 1.36
+   },
+   {
+    "iso": "CHE",
+    "name": "Switzerland",
+    "km": 915,
+    "pct": 1.18
+   },
+   {
+    "iso": "SVN",
+    "name": "Slovenia",
+    "km": 798,
+    "pct": 1.03
+   },
+   {
+    "iso": "UKR",
+    "name": "Ukraine",
+    "km": 440,
+    "pct": 0.57
+   },
+   {
+    "iso": "BRA",
+    "name": "Brazil",
+    "km": 368,
+    "pct": 0.47
+   },
+   {
+    "iso": "BIH",
+    "name": "Bosnia and Herzegovina",
+    "km": 345,
+    "pct": 0.44
+   },
+   {
+    "iso": "BEL",
+    "name": "Belgium",
+    "km": 300,
+    "pct": 0.39
+   },
+   {
+    "iso": "GRC",
+    "name": "Greece",
+    "km": 241,
+    "pct": 0.31
+   },
+   {
+    "iso": "JPN",
+    "name": "Japan",
+    "km": 141,
+    "pct": 0.18
+   },
+   {
+    "iso": "RUS",
+    "name": "Russia",
+    "km": 139,
+    "pct": 0.18
+   },
+   {
+    "iso": "IRL",
+    "name": "Ireland",
+    "km": 137,
+    "pct": 0.18
+   },
+   {
+    "iso": "NLD",
+    "name": "Netherlands",
+    "km": 122,
+    "pct": 0.16
+   },
+   {
+    "iso": "LUX",
+    "name": "Luxembourg",
+    "km": 108,
+    "pct": 0.14
+   },
+   {
+    "iso": "ALA",
+    "name": "Åland",
+    "km": 79,
+    "pct": 0.1
+   },
+   {
+    "iso": "SEA",
+    "name": "at sea or on the shore",
+    "km": 77,
+    "pct": 0.1
+   },
+   {
+    "iso": "ISR",
+    "name": "Israel",
+    "km": 43,
+    "pct": 0.05
+   },
+   {
+    "iso": "MLT",
+    "name": "Malta",
+    "km": 35,
+    "pct": 0.04
+   },
+   {
+    "iso": "SMR",
+    "name": "San Marino",
+    "km": 10,
+    "pct": 0.01
+   },
+   {
+    "iso": "IND",
+    "name": "India",
+    "km": 9,
+    "pct": 0.01
+   },
+   {
+    "iso": "TWN",
+    "name": "Taiwan",
+    "km": 4,
+    "pct": 0.0
+   }
+  ],
+  "multi_family_km": 1591,
+  "europe_km": 77162,
+  "europe_pct": 99.18,
+  "outside_km": 564,
+  "by_continent": {
+   "Europe": 77162,
+   "South America": 368,
+   "Asia": 197,
+   "at sea": 77
+  },
+  "outside": [
+   {
+    "iso": "BRA",
+    "name": "Brazil",
+    "km": 367.7
+   },
+   {
+    "iso": "JPN",
+    "name": "Japan",
+    "km": 141.0
+   },
+   {
+    "iso": "ISR",
+    "name": "Israel",
+    "km": 42.5
+   },
+   {
+    "iso": "IND",
+    "name": "India",
+    "km": 8.6
+   },
+   {
+    "iso": "TWN",
+    "name": "Taiwan",
+    "km": 3.7
+   },
+   {
+    "iso": "PSE",
+    "name": "Palestine",
+    "km": 0.7
+   },
+   {
+    "iso": "KGZ",
+    "name": "Kyrgyzstan",
+    "km": 0.2
+   }
+  ],
+  "n_outside_countries": 5
+ },
+ "fam": {
+  "camino": {
+   "name": "Camino de Santiago",
+   "km": 41674,
+   "pct_of_all": 53.56,
+   "relations": 728,
+   "n_countries": 22,
+   "countries": [
+    {
+     "iso": "DEU",
+     "name": "Germany",
+     "km": 14814,
+     "pct": 35.55
+    },
+    {
+     "iso": "ESP",
+     "name": "Spain",
+     "km": 9922,
+     "pct": 23.81
+    },
+    {
+     "iso": "POL",
+     "name": "Poland",
+     "km": 5289,
+     "pct": 12.69
+    },
+    {
+     "iso": "AUT",
+     "name": "Austria",
+     "km": 1912,
+     "pct": 4.59
+    },
+    {
+     "iso": "HRV",
+     "name": "Croatia",
+     "km": 1347,
+     "pct": 3.23
+    },
+    {
+     "iso": "CZE",
+     "name": "Czechia",
+     "km": 1180,
+     "pct": 2.83
+    },
+    {
+     "iso": "ITA",
+     "name": "Italy",
+     "km": 1143,
+     "pct": 2.74
+    },
+    {
+     "iso": "DNK",
+     "name": "Denmark",
+     "km": 1137,
+     "pct": 2.73
+    },
+    {
+     "iso": "PRT",
+     "name": "Portugal",
+     "km": 942,
+     "pct": 2.26
+    },
+    {
+     "iso": "SVN",
+     "name": "Slovenia",
+     "km": 721,
+     "pct": 1.73
+    },
+    {
+     "iso": "SVK",
+     "name": "Slovakia",
+     "km": 707,
+     "pct": 1.7
+    },
+    {
+     "iso": "HUN",
+     "name": "Hungary",
+     "km": 579,
+     "pct": 1.39
+    },
+    {
+     "iso": "CHE",
+     "name": "Switzerland",
+     "km": 575,
+     "pct": 1.38
+    },
+    {
+     "iso": "FRA",
+     "name": "France",
+     "km": 462,
+     "pct": 1.11
+    },
+    {
+     "iso": "UKR",
+     "name": "Ukraine",
+     "km": 440,
+     "pct": 1.06
+    },
+    {
+     "iso": "RUS",
+     "name": "Russia",
+     "km": 137,
+     "pct": 0.33
+    },
+    {
+     "iso": "NLD",
+     "name": "Netherlands",
+     "km": 122,
+     "pct": 0.29
+    },
+    {
+     "iso": "LUX",
+     "name": "Luxembourg",
+     "km": 108,
+     "pct": 0.26
+    },
+    {
+     "iso": "BEL",
+     "name": "Belgium",
+     "km": 60,
+     "pct": 0.15
+    },
+    {
+     "iso": "GBR",
+     "name": "United Kingdom",
+     "km": 31,
+     "pct": 0.07
+    },
+    {
+     "iso": "IRL",
+     "name": "Ireland",
+     "km": 20,
+     "pct": 0.05
+    },
+    {
+     "iso": "BIH",
+     "name": "Bosnia and Herzegovina",
+     "km": 16,
+     "pct": 0.04
+    },
+    {
+     "iso": "SEA",
+     "name": "at sea or on the shore",
+     "km": 10,
+     "pct": 0.02
+    }
+   ],
+   "how": {
+    "name": 479,
+    "parent": 4,
+    "shell symbol": 78,
+    "wikidata": 167
+   },
+   "by_iso": {
+    "DEU": 14814,
+    "ESP": 9922,
+    "POL": 5289,
+    "AUT": 1912,
+    "HRV": 1347,
+    "CZE": 1180,
+    "ITA": 1143,
+    "DNK": 1137,
+    "PRT": 942,
+    "SVN": 721,
+    "SVK": 707,
+    "HUN": 579,
+    "CHE": 575,
+    "FRA": 462,
+    "UKR": 440,
+    "RUS": 137,
+    "NLD": 122,
+    "LUX": 108,
+    "BEL": 60,
+    "GBR": 31,
+    "IRL": 20,
+    "BIH": 16,
+    "SEA": 10
+   },
+   "de_es_ratio": 1.49,
+   "es_pct": 23.81,
+   "de_pct": 35.55,
+   "outside_es_pt_pct": 73.93,
+   "fr_km": 462,
+   "shell_rel": 78,
+   "far_km": 2911,
+   "far_iso": "UKR",
+   "far_country": "Ukraine",
+   "far_lat": 49.233,
+   "far_lon": 28.474,
+   "far_near": {
+    "city": "Vinnytsya",
+    "km": 1
+   },
+   "far_route": "Camino Podolico",
+   "north_lat": 57.44,
+   "north_country": "Denmark",
+   "north_route": "Den danske Pilgrimsrute- Nordjylland Øst",
+   "north_near": {
+    "city": "Göteborg",
+    "km": 94
+   },
+   "east_lon": 28.47,
+   "east_country": "Ukraine",
+   "east_route": "Camino Podolico",
+   "over1000_pct": 73.66,
+   "over2000_pct": 21.61,
+   "within500_pct": 12.9,
+   "within100_km": 777,
+   "median_d": 1659,
+   "max_band": "1,500 to 2,000 km",
+   "max_band_pct": 41.09
+  },
+  "francigena": {
+   "name": "Via Francigena",
+   "km": 5120,
+   "pct_of_all": 6.58,
+   "relations": 119,
+   "n_countries": 5,
+   "countries": [
+    {
+     "iso": "ITA",
+     "name": "Italy",
+     "km": 3767,
+     "pct": 73.57
+    },
+    {
+     "iso": "FRA",
+     "name": "France",
+     "km": 995,
+     "pct": 19.44
+    },
+    {
+     "iso": "CHE",
+     "name": "Switzerland",
+     "km": 208,
+     "pct": 4.06
+    },
+    {
+     "iso": "DEU",
+     "name": "Germany",
+     "km": 81,
+     "pct": 1.58
+    },
+    {
+     "iso": "GBR",
+     "name": "United Kingdom",
+     "km": 37,
+     "pct": 0.72
+    },
+    {
+     "iso": "SEA",
+     "name": "at sea or on the shore",
+     "km": 32,
+     "pct": 0.62
+    }
+   ],
+   "how": {
+    "name": 76,
+    "wikidata": 43
+   },
+   "by_iso": {
+    "ITA": 3767,
+    "FRA": 995,
+    "CHE": 208,
+    "DEU": 81,
+    "GBR": 37,
+    "SEA": 32
+   },
+   "it_pct": 73.57
+  },
+  "olav": {
+   "name": "St Olav Ways",
+   "km": 3011,
+   "pct_of_all": 3.87,
+   "relations": 53,
+   "n_countries": 3,
+   "countries": [
+    {
+     "iso": "NOR",
+     "name": "Norway",
+     "km": 2052,
+     "pct": 68.17
+    },
+    {
+     "iso": "SWE",
+     "name": "Sweden",
+     "km": 854,
+     "pct": 28.37
+    },
+    {
+     "iso": "ALA",
+     "name": "Åland",
+     "km": 79,
+     "pct": 2.62
+    },
+    {
+     "iso": "SEA",
+     "name": "at sea or on the shore",
+     "km": 25,
+     "pct": 0.84
+    }
+   ],
+   "how": {
+    "name": 23,
+    "wikidata": 30
+   },
+   "by_iso": {
+    "NOR": 2052,
+    "SWE": 854,
+    "ALA": 79,
+    "SEA": 25
+   },
+   "no_pct": 68.15
+  },
+  "marian": {
+   "name": "Marian ways",
+   "km": 6750,
+   "pct_of_all": 8.68,
+   "relations": 271,
+   "n_countries": 11,
+   "countries": [
+    {
+     "iso": "HUN",
+     "name": "Hungary",
+     "km": 2440,
+     "pct": 36.14
+    },
+    {
+     "iso": "ROU",
+     "name": "Romania",
+     "km": 1056,
+     "pct": 15.64
+    },
+    {
+     "iso": "AUT",
+     "name": "Austria",
+     "km": 1050,
+     "pct": 15.56
+    },
+    {
+     "iso": "PRT",
+     "name": "Portugal",
+     "km": 743,
+     "pct": 11.01
+    },
+    {
+     "iso": "ITA",
+     "name": "Italy",
+     "km": 343,
+     "pct": 5.08
+    },
+    {
+     "iso": "SVK",
+     "name": "Slovakia",
+     "km": 336,
+     "pct": 4.98
+    },
+    {
+     "iso": "BIH",
+     "name": "Bosnia and Herzegovina",
+     "km": 329,
+     "pct": 4.87
+    },
+    {
+     "iso": "DEU",
+     "name": "Germany",
+     "km": 220,
+     "pct": 3.26
+    },
+    {
+     "iso": "POL",
+     "name": "Poland",
+     "km": 132,
+     "pct": 1.95
+    },
+    {
+     "iso": "HRV",
+     "name": "Croatia",
+     "km": 100,
+     "pct": 1.47
+    },
+    {
+     "iso": "CZE",
+     "name": "Czechia",
+     "km": 2,
+     "pct": 0.03
+    }
+   ],
+   "how": {
+    "name": 270,
+    "parent": 1
+   },
+   "by_iso": {
+    "HUN": 2440,
+    "ROU": 1056,
+    "AUT": 1050,
+    "PRT": 743,
+    "ITA": 343,
+    "SVK": 336,
+    "BIH": 329,
+    "DEU": 220,
+    "POL": 132,
+    "HRV": 100,
+    "CZE": 2
+   },
+   "hu_pct": 36.15,
+   "mariaut_km": 4609
+  },
+  "other": {
+   "name": "Other pilgrim routes",
+   "km": 22862,
+   "pct_of_all": 29.38,
+   "relations": 722,
+   "n_countries": 26,
+   "countries": [
+    {
+     "iso": "DEU",
+     "name": "Germany",
+     "km": 6849,
+     "pct": 29.96
+    },
+    {
+     "iso": "ITA",
+     "name": "Italy",
+     "km": 5151,
+     "pct": 22.53
+    },
+    {
+     "iso": "HUN",
+     "name": "Hungary",
+     "km": 2116,
+     "pct": 9.25
+    },
+    {
+     "iso": "AUT",
+     "name": "Austria",
+     "km": 1791,
+     "pct": 7.83
+    },
+    {
+     "iso": "SWE",
+     "name": "Sweden",
+     "km": 1414,
+     "pct": 6.19
+    },
+    {
+     "iso": "FRA",
+     "name": "France",
+     "km": 1370,
+     "pct": 5.99
+    },
+    {
+     "iso": "GBR",
+     "name": "United Kingdom",
+     "km": 1016,
+     "pct": 4.45
+    },
+    {
+     "iso": "CZE",
+     "name": "Czechia",
+     "km": 713,
+     "pct": 3.12
+    },
+    {
+     "iso": "ESP",
+     "name": "Spain",
+     "km": 462,
+     "pct": 2.02
+    },
+    {
+     "iso": "BRA",
+     "name": "Brazil",
+     "km": 368,
+     "pct": 1.61
+    },
+    {
+     "iso": "GRC",
+     "name": "Greece",
+     "km": 241,
+     "pct": 1.05
+    },
+    {
+     "iso": "BEL",
+     "name": "Belgium",
+     "km": 239,
+     "pct": 1.05
+    },
+    {
+     "iso": "POL",
+     "name": "Poland",
+     "km": 225,
+     "pct": 0.98
+    },
+    {
+     "iso": "CHE",
+     "name": "Switzerland",
+     "km": 166,
+     "pct": 0.73
+    },
+    {
+     "iso": "SVK",
+     "name": "Slovakia",
+     "km": 149,
+     "pct": 0.65
+    },
+    {
+     "iso": "JPN",
+     "name": "Japan",
+     "km": 141,
+     "pct": 0.62
+    },
+    {
+     "iso": "IRL",
+     "name": "Ireland",
+     "km": 117,
+     "pct": 0.51
+    },
+    {
+     "iso": "SVN",
+     "name": "Slovenia",
+     "km": 87,
+     "pct": 0.38
+    },
+    {
+     "iso": "HRV",
+     "name": "Croatia",
+     "km": 79,
+     "pct": 0.35
+    },
+    {
+     "iso": "PRT",
+     "name": "Portugal",
+     "km": 54,
+     "pct": 0.24
+    },
+    {
+     "iso": "ISR",
+     "name": "Israel",
+     "km": 43,
+     "pct": 0.19
+    },
+    {
+     "iso": "MLT",
+     "name": "Malta",
+     "km": 35,
+     "pct": 0.15
+    },
+    {
+     "iso": "SEA",
+     "name": "at sea or on the shore",
+     "km": 10,
+     "pct": 0.05
+    },
+    {
+     "iso": "SMR",
+     "name": "San Marino",
+     "km": 10,
+     "pct": 0.04
+    },
+    {
+     "iso": "IND",
+     "name": "India",
+     "km": 9,
+     "pct": 0.04
+    },
+    {
+     "iso": "TWN",
+     "name": "Taiwan",
+     "km": 4,
+     "pct": 0.02
+    },
+    {
+     "iso": "RUS",
+     "name": "Russia",
+     "km": 2,
+     "pct": 0.01
+    }
+   ],
+   "how": {
+    "none (other)": 595,
+    "parent": 127
+   },
+   "by_iso": {
+    "DEU": 6849,
+    "ITA": 5151,
+    "HUN": 2116,
+    "AUT": 1791,
+    "SWE": 1414,
+    "FRA": 1370,
+    "GBR": 1016,
+    "CZE": 713,
+    "ESP": 462,
+    "BRA": 368,
+    "GRC": 241,
+    "BEL": 239,
+    "POL": 225,
+    "CHE": 166,
+    "SVK": 149,
+    "JPN": 141,
+    "IRL": 117,
+    "SVN": 87,
+    "HRV": 79,
+    "PRT": 54,
+    "ISR": 43,
+    "MLT": 35,
+    "SEA": 10,
+    "SMR": 10,
+    "IND": 9,
+    "TWN": 4,
+    "RUS": 2
+   }
+  }
+ },
+ "bands": [
+  {
+   "band": "0 to 250 km",
+   "lo": 0,
+   "hi": 250,
+   "km": 2243,
+   "pct": 5.38,
+   "top": [
+    [
+     "Spain",
+     1927
+    ],
+    [
+     "Portugal",
+     316
+    ]
+   ]
+  },
+  {
+   "band": "250 to 500 km",
+   "lo": 250,
+   "hi": 500,
+   "km": 3135,
+   "pct": 7.52,
+   "top": [
+    [
+     "Spain",
+     2734
+    ],
+    [
+     "Portugal",
+     401
+    ]
+   ]
+  },
+  {
+   "band": "500 to 1,000 km",
+   "lo": 500,
+   "hi": 1000,
+   "km": 5601,
+   "pct": 13.44,
+   "top": [
+    [
+     "Spain",
+     5076
+    ],
+    [
+     "France",
+     299
+    ],
+    [
+     "Portugal",
+     226
+    ]
+   ]
+  },
+  {
+   "band": "1,000 to 1,500 km",
+   "lo": 1000,
+   "hi": 1500,
+   "km": 4564,
+   "pct": 10.95,
+   "top": [
+    [
+     "Germany",
+     3242
+    ],
+    [
+     "Switzerland",
+     449
+    ],
+    [
+     "Italy",
+     368
+    ]
+   ]
+  },
+  {
+   "band": "1,500 to 2,000 km",
+   "lo": 1500,
+   "hi": 2000,
+   "km": 17125,
+   "pct": 41.09,
+   "top": [
+    [
+     "Germany",
+     11131
+    ],
+    [
+     "Austria",
+     1625
+    ],
+    [
+     "Croatia",
+     1037
+    ]
+   ]
+  },
+  {
+   "band": "2,000 to 2,500 km",
+   "lo": 2000,
+   "hi": 2500,
+   "km": 8004,
+   "pct": 19.21,
+   "top": [
+    [
+     "Poland",
+     4715
+    ],
+    [
+     "Slovakia",
+     707
+    ],
+    [
+     "Hungary",
+     579
+    ]
+   ]
+  },
+  {
+   "band": "2,500 to 3,000 km",
+   "lo": 2500,
+   "hi": 3000,
+   "km": 1003,
+   "pct": 2.41,
+   "top": [
+    [
+     "Poland",
+     529
+    ],
+    [
+     "Ukraine",
+     440
+    ],
+    [
+     "Russia",
+     32
+    ]
+   ]
+  }
+ ],
+ "n_top_routes": 1129,
+ "longest": [
+  {
+   "id": "11860709",
+   "name": "Via Francigena",
+   "fam": "francigena",
+   "family": "Via Francigena",
+   "km": 3944,
+   "children": 48,
+   "countries": [
+    "Italy",
+    "France",
+    "Switzerland",
+    "United Kingdom"
+   ],
+   "distance_tag": "3268",
+   "route": "hiking"
+  },
+  {
+   "id": "8448513",
+   "name": "Jakobswege Bayern",
+   "fam": "camino",
+   "family": "Camino de Santiago",
+   "km": 2696,
+   "children": 49,
+   "countries": [
+    "Germany",
+    "Austria",
+    "Czechia"
+   ],
+   "distance_tag": "",
+   "route": "hiking"
+  },
+  {
+   "id": "5765074",
+   "name": "Jakobswege Baden-Württemberg",
+   "fam": "camino",
+   "family": "Camino de Santiago",
+   "km": 2227,
+   "children": 46,
+   "countries": [
+    "Germany",
+    "Switzerland",
+    "France"
+   ],
+   "distance_tag": "",
+   "route": "hiking"
+  },
+  {
+   "id": "2073724",
+   "name": "Jakobsweg Österreich",
+   "fam": "camino",
+   "family": "Camino de Santiago",
+   "km": 1416,
+   "children": 15,
+   "countries": [
+    "Austria",
+    "Hungary",
+    "Germany",
+    "Slovenia",
+    "Slovakia"
+   ],
+   "distance_tag": "",
+   "route": "hiking"
+  },
+  {
+   "id": "2110963",
+   "name": "Via Mariae M01",
+   "fam": "marian",
+   "family": "Marian ways",
+   "km": 1273,
+   "children": 64,
+   "countries": [
+    "Hungary",
+    "Romania"
+   ],
+   "distance_tag": "1330",
+   "route": "hiking"
+  },
+  {
+   "id": "7171109",
+   "name": "Lutherweg",
+   "fam": "other",
+   "family": "Other pilgrim routes",
+   "km": 1175,
+   "children": 5,
+   "countries": [
+    "Germany"
+   ],
+   "distance_tag": "",
+   "route": "hiking"
+  },
+  {
+   "id": "4649443",
+   "name": "Via Mariae M02",
+   "fam": "marian",
+   "family": "Marian ways",
+   "km": 1109,
+   "children": 51,
+   "countries": [
+    "Hungary",
+    "Bosnia and Herzegovina",
+    "Poland",
+    "Slovakia",
+    "Croatia"
+   ],
+   "distance_tag": "",
+   "route": "hiking"
+  },
+  {
+   "id": "1673458",
+   "name": "Jakobsweg Via Scandinavica",
+   "fam": "camino",
+   "family": "Camino de Santiago",
+   "km": 1064,
+   "children": 9,
+   "countries": [
+    "Germany"
+   ],
+   "distance_tag": "",
+   "route": "hiking"
+  },
+  {
+   "id": "4646510",
+   "name": "Via Mariae M05 - The Central-European Pilgrimway",
+   "fam": "marian",
+   "family": "Marian ways",
+   "km": 1011,
+   "children": 50,
+   "countries": [
+    "Hungary",
+    "Romania",
+    "Slovakia",
+    "Austria"
+   ],
+   "distance_tag": "",
+   "route": "hiking"
+  },
+  {
+   "id": "2401811",
+   "name": "Camino de Santiago del Sureste",
+   "fam": "camino",
+   "family": "Camino de Santiago",
+   "km": 923,
+   "children": 0,
+   "countries": [
+    "Spain"
+   ],
+   "distance_tag": "",
+   "route": "hiking"
+  },
+  {
+   "id": "8448508",
+   "name": "Jakobswege Brandenburg",
+   "fam": "camino",
+   "family": "Camino de Santiago",
+   "km": 893,
+   "children": 10,
+   "countries": [
+    "Germany",
+    "Poland"
+   ],
+   "distance_tag": "",
+   "route": "hiking"
+  },
+  {
+   "id": "1777623",
+   "name": "Wanderroute Via Nova",
+   "fam": "other",
+   "family": "Other pilgrim routes",
+   "km": 852,
+   "children": 0,
+   "countries": [
+    "Germany",
+    "Austria",
+    "Czechia"
+   ],
+   "distance_tag": "",
+   "route": "hiking"
+  },
+  {
+   "id": "14781298",
+   "name": "Jakobova pot Slovenija",
+   "fam": "camino",
+   "family": "Camino de Santiago",
+   "km": 747,
+   "children": 12,
+   "countries": [
+    "Slovenia",
+    "Italy",
+    "Hungary"
+   ],
+   "distance_tag": "",
+   "route": "hiking"
+  },
+  {
+   "id": "1673439",
+   "name": "Jakobsweg via Baltica",
+   "fam": "camino",
+   "family": "Camino de Santiago",
+   "km": 722,
+   "children": 8,
+   "countries": [
+    "Germany",
+    "Poland"
+   ],
+   "distance_tag": "",
+   "route": "hiking"
+  },
+  {
+   "id": "10524322",
+   "name": "St. Olavsleden",
+   "fam": "olav",
+   "family": "St Olav Ways",
+   "km": 658,
+   "children": 30,
+   "countries": [
+    "Sweden",
+    "Norway"
+   ],
+   "distance_tag": "564",
+   "route": "hiking"
+  },
+  {
+   "id": "7944114",
+   "name": "CSG - Il Cammino di Santa Giulia",
+   "fam": "other",
+   "family": "Other pilgrim routes",
+   "km": 652,
+   "children": 43,
+   "countries": [
+    "Italy"
+   ],
+   "distance_tag": "",
+   "route": "hiking"
+  },
+  {
+   "id": "14632511",
+   "name": "Magyar Zarándokút",
+   "fam": "other",
+   "family": "Other pilgrim routes",
+   "km": 608,
+   "children": 9,
+   "countries": [
+    "Hungary"
+   ],
+   "distance_tag": "",
+   "route": "hiking"
+  },
+  {
+   "id": "18027801",
+   "name": "Camino de las Asturias",
+   "fam": "camino",
+   "family": "Camino de Santiago",
+   "km": 552,
+   "children": 0,
+   "countries": [
+    "Spain"
+   ],
+   "distance_tag": "",
+   "route": "hiking"
+  },
+  {
+   "id": "8448475",
+   "name": "Jakobswege Sachsen",
+   "fam": "camino",
+   "family": "Camino de Santiago",
+   "km": 526,
+   "children": 22,
+   "countries": [
+    "Germany",
+    "Czechia"
+   ],
+   "distance_tag": "",
+   "route": "hiking"
+  },
+  {
+   "id": "15514582",
+   "name": "EuroVelo 3 - Pilgrim's Route - part Germany",
+   "fam": "other",
+   "family": "Other pilgrim routes",
+   "km": 525,
+   "children": 6,
+   "countries": [
+    "Germany"
+   ],
+   "distance_tag": "",
+   "route": "bicycle"
+  }
+ ],
+ "top_routes_over_500": 21,
+ "top_routes_over_1000": 9,
+ "top_routes_median_km": 21.5,
+ "longest_leaf": [
+  {
+   "id": "2401811",
+   "name": "Camino de Santiago del Sureste",
+   "fam": "camino",
+   "family": "Camino de Santiago",
+   "km": 923,
+   "country": "Spain",
+   "n_iso": 1,
+   "route": "hiking",
+   "distance_tag": "",
+   "top": ""
+  },
+  {
+   "id": "1777623",
+   "name": "Wanderroute Via Nova",
+   "fam": "other",
+   "family": "Other pilgrim routes",
+   "km": 852,
+   "country": "Germany",
+   "n_iso": 3,
+   "route": "hiking",
+   "distance_tag": "",
+   "top": ""
+  },
+  {
+   "id": "18027801",
+   "name": "Camino de las Asturias",
+   "fam": "camino",
+   "family": "Camino de Santiago",
+   "km": 552,
+   "country": "Spain",
+   "n_iso": 1,
+   "route": "hiking",
+   "distance_tag": "",
+   "top": ""
+  },
+  {
+   "id": "1988453",
+   "name": "Pilgerroute NRW",
+   "fam": "other",
+   "family": "Other pilgrim routes",
+   "km": 517,
+   "country": "Germany",
+   "n_iso": 1,
+   "route": "bicycle",
+   "distance_tag": "",
+   "top": ""
+  },
+  {
+   "id": "15743566",
+   "name": "Podlaska Droga św. Jakuba",
+   "fam": "camino",
+   "family": "Camino de Santiago",
+   "km": 465,
+   "country": "Poland",
+   "n_iso": 1,
+   "route": "hiking",
+   "distance_tag": "",
+   "top": ""
+  },
+  {
+   "id": "1946360",
+   "name": "Chemin d'Assise, Cluny - Montcenis",
+   "fam": "other",
+   "family": "Other pilgrim routes",
+   "km": 462,
+   "country": "France",
+   "n_iso": 2,
+   "route": "hiking",
+   "distance_tag": "",
+   "top": ""
+  },
+  {
+   "id": "1252139",
+   "name": "Jakobsweg Via Scandinavica, Niedersachsen",
+   "fam": "camino",
+   "family": "Camino de Santiago",
+   "km": 447,
+   "country": "Germany",
+   "n_iso": 1,
+   "route": "hiking",
+   "distance_tag": "",
+   "top": ""
+  },
+  {
+   "id": "14236768",
+   "name": "Szent Jakab út Via Pannonia, fő ág és rövid alternatív szakaszok",
+   "fam": "camino",
+   "family": "Camino de Santiago",
+   "km": 428,
+   "country": "Hungary",
+   "n_iso": 1,
+   "route": "hiking",
+   "distance_tag": "",
+   "top": ""
+  },
+  {
+   "id": "1211396",
+   "name": "Camino Mozárabe",
+   "fam": "camino",
+   "family": "Camino de Santiago",
+   "km": 423,
+   "country": "Spain",
+   "n_iso": 1,
+   "route": "hiking",
+   "distance_tag": "",
+   "top": ""
+  },
+  {
+   "id": "2168931",
+   "name": "Magyar Zarándokút (fő útvonal)",
+   "fam": "other",
+   "family": "Other pilgrim routes",
+   "km": 415,
+   "country": "Hungary",
+   "n_iso": 1,
+   "route": "hiking",
+   "distance_tag": "",
+   "top": ""
+  },
+  {
+   "id": "7361206",
+   "name": "Camino de Santiago de la Lana.Senderista",
+   "fam": "camino",
+   "family": "Camino de Santiago",
+   "km": 403,
+   "country": "Spain",
+   "n_iso": 1,
+   "route": "hiking",
+   "distance_tag": "408",
+   "top": ""
+  },
+  {
+   "id": "4062882",
+   "name": "Camino de Santiago de la Lana.BTT",
+   "fam": "camino",
+   "family": "Camino de Santiago",
+   "km": 401,
+   "country": "Spain",
+   "n_iso": 1,
+   "route": "mtb",
+   "distance_tag": "408",
+   "top": ""
+  },
+  {
+   "id": "8415851",
+   "name": "Via Portugal Nascente",
+   "fam": "camino",
+   "family": "Camino de Santiago",
+   "km": 398,
+   "country": "Portugal",
+   "n_iso": 2,
+   "route": "hiking",
+   "distance_tag": "",
+   "top": ""
+  },
+  {
+   "id": "20233330",
+   "name": "Camino Lika",
+   "fam": "camino",
+   "family": "Camino de Santiago",
+   "km": 394,
+   "country": "Croatia",
+   "n_iso": 2,
+   "route": "hiking",
+   "distance_tag": "",
+   "top": ""
+  },
+  {
+   "id": "2434722",
+   "name": "Jakobsweg Böhmen-Bayern-Tirol",
+   "fam": "camino",
+   "family": "Camino de Santiago",
+   "km": 393,
+   "country": "Germany",
+   "n_iso": 3,
+   "route": "hiking",
+   "distance_tag": "",
+   "top": ""
+  }
+ ],
+ "leaf_over_300": 29,
+ "leaf_median_km": 21.1,
+ "wd": {
+  "items": 1862,
+  "stations_of_cross": 1458,
+  "routes": 404,
+  "routes_labelled": 250,
+  "with_osm": 41,
+  "with_osm_in_extract": 16,
+  "with_osm_missing": 25,
+  "missing_named": [
+   "Arno Trail",
+   "Camino Incluso",
+   "Catalan Way of saint James",
+   "Colexio de San Xerome",
+   "French Way",
+   "Ingegerdsleden",
+   "Iseji",
+   "Kumano Kodō",
+   "Markt",
+   "Roman way",
+   "Sanabria Way",
+   "St Olav Romboway",
+   "St. Birgitta Ways",
+   "The Forgotten Way",
+   "Via Brabantica",
+   "Via Gallia Belgica",
+   "Via Tolosana",
+   "Via Turonensis",
+   "Way of Saint James UNESCO World Heritage Sites in France",
+   "chemin de Compostelle, entre Nasbinals et Saint-Chély-d'Aubrac",
+   "chemin du Puy, de Lectoure à Condom"
+  ],
+  "with_length": 33,
+  "with_en": 38,
+  "darb_zubayda_km": 1300
+ },
+ "sites": {
+  "n": 1330,
+  "rows": 1403,
+  "unlabelled": 160,
+  "n_countries": 70,
+  "top": [
+   {
+    "iso": "DEU",
+    "name": "Germany",
+    "n": 239,
+    "pct": 17.97
+   },
+   {
+    "iso": "ITA",
+    "name": "Italy",
+    "n": 225,
+    "pct": 16.92
+   },
+   {
+    "iso": "ESP",
+    "name": "Spain",
+    "n": 163,
+    "pct": 12.26
+   },
+   {
+    "iso": "JPN",
+    "name": "Japan",
+    "n": 114,
+    "pct": 8.57
+   },
+   {
+    "iso": "POL",
+    "name": "Poland",
+    "n": 52,
+    "pct": 3.91
+   },
+   {
+    "iso": "PHL",
+    "name": "Philippines",
+    "n": 51,
+    "pct": 3.83
+   },
+   {
+    "iso": "AUT",
+    "name": "Austria",
+    "n": 48,
+    "pct": 3.61
+   },
+   {
+    "iso": "PRT",
+    "name": "Portugal",
+    "n": 43,
+    "pct": 3.23
+   },
+   {
+    "iso": "CZE",
+    "name": "Czechia",
+    "n": 41,
+    "pct": 3.08
+   },
+   {
+    "iso": "USA",
+    "name": "United States",
+    "n": 33,
+    "pct": 2.48
+   },
+   {
+    "iso": "CAN",
+    "name": "Canada",
+    "n": 28,
+    "pct": 2.11
+   },
+   {
+    "iso": "FRA",
+    "name": "France",
+    "n": 25,
+    "pct": 1.88
+   },
+   {
+    "iso": "IND",
+    "name": "India",
+    "n": 24,
+    "pct": 1.8
+   },
+   {
+    "iso": "BEL",
+    "name": "Belgium",
+    "n": 21,
+    "pct": 1.58
+   },
+   {
+    "iso": "TUR",
+    "name": "Turkey",
+    "n": 21,
+    "pct": 1.58
+   },
+   {
+    "iso": "CHE",
+    "name": "Switzerland",
+    "n": 20,
+    "pct": 1.5
+   },
+   {
+    "iso": "GBR",
+    "name": "United Kingdom",
+    "n": 18,
+    "pct": 1.35
+   },
+   {
+    "iso": "NLD",
+    "name": "Netherlands",
+    "n": 15,
+    "pct": 1.13
+   },
+   {
+    "iso": "IRL",
+    "name": "Ireland",
+    "n": 14,
+    "pct": 1.05
+   },
+   {
+    "iso": "HUN",
+    "name": "Hungary",
+    "n": 10,
+    "pct": 0.75
+   }
+  ],
+  "by_iso": {
+   "DEU": 239,
+   "ITA": 225,
+   "ESP": 163,
+   "JPN": 114,
+   "POL": 52,
+   "PHL": 51,
+   "AUT": 48,
+   "PRT": 43,
+   "CZE": 41,
+   "USA": 33,
+   "CAN": 28,
+   "FRA": 25,
+   "IND": 24,
+   "BEL": 21,
+   "TUR": 21,
+   "CHE": 20,
+   "GBR": 18,
+   "NLD": 15,
+   "IRL": 14,
+   "HUN": 10,
+   "BRA": 9,
+   "KAZ": 8,
+   "CHL": 7,
+   "NPL": 6,
+   "BIH": 6,
+   "HRV": 6,
+   "ISR": 5,
+   "ARG": 4,
+   "PER": 4,
+   "MEX": 4,
+   "SVN": 4,
+   "SVK": 4,
+   "LUX": 3,
+   "ECU": 3,
+   "ALB": 2,
+   "VEN": 2,
+   "AUS": 2,
+   "AND": 2,
+   "AZE": 2,
+   "CHN": 2,
+   "SLV": 2,
+   "URY": 2,
+   "NIC": 2,
+   "CUB": 2,
+   "EGY": 2,
+   "GRC": 2,
+   "THA": 2,
+   "SYR": 2,
+   "BOL": 2,
+   "KOR": 2,
+   "AFG": 1,
+   "AGO": 1,
+   "BEN": 1,
+   "COL": 1,
+   "ERI": 1,
+   "DZA": 1,
+   "BGD": 1,
+   "LVA": 1,
+   "LTU": 1,
+   "LBN": 1,
+   "MLT": 1,
+   "KHM": 1,
+   "PAK": 1,
+   "MMR": 1,
+   "PRY": 1,
+   "PSE": 1,
+   "ROU": 1,
+   "PRI": 1,
+   "TGO": 1,
+   "UKR": 1
+  },
+  "dens": [
+   {
+    "iso": "AUT",
+    "name": "Austria",
+    "n": 48,
+    "per_m": 5.41
+   },
+   {
+    "iso": "PRT",
+    "name": "Portugal",
+    "n": 43,
+    "per_m": 4.19
+   },
+   {
+    "iso": "CZE",
+    "name": "Czechia",
+    "n": 41,
+    "per_m": 3.84
+   },
+   {
+    "iso": "ITA",
+    "name": "Italy",
+    "n": 225,
+    "per_m": 3.73
+   },
+   {
+    "iso": "ESP",
+    "name": "Spain",
+    "n": 163,
+    "per_m": 3.46
+   },
+   {
+    "iso": "DEU",
+    "name": "Germany",
+    "n": 239,
+    "per_m": 2.87
+   },
+   {
+    "iso": "IRL",
+    "name": "Ireland",
+    "n": 14,
+    "per_m": 2.83
+   },
+   {
+    "iso": "CHE",
+    "name": "Switzerland",
+    "n": 20,
+    "per_m": 2.33
+   },
+   {
+    "iso": "BEL",
+    "name": "Belgium",
+    "n": 21,
+    "per_m": 1.83
+   },
+   {
+    "iso": "POL",
+    "name": "Poland",
+    "n": 52,
+    "per_m": 1.37
+   },
+   {
+    "iso": "HUN",
+    "name": "Hungary",
+    "n": 10,
+    "per_m": 1.02
+   },
+   {
+    "iso": "JPN",
+    "name": "Japan",
+    "n": 114,
+    "per_m": 0.9
+   }
+  ],
+  "dens_n_countries": 20,
+  "by_cont": {
+   "Europe": 968,
+   "Asia": 246,
+   "North America": 72,
+   "South America": 35,
+   "Africa": 7,
+   "Oceania": 2
+  },
+  "rec": {
+   "Not recorded": 653,
+   "Christian": 633,
+   "Buddhist": 42,
+   "Muslim": 1,
+   "Jain": 1
+  },
+  "rec_n": 677,
+  "rec_pct": 50.9,
+  "rec_christian_pct": 93.5,
+  "trad": {
+   "Christian": 1023,
+   "Not recorded": 175,
+   "Buddhist": 115,
+   "Muslim": 8,
+   "Hindu": 7,
+   "Jain": 1,
+   "Jewish": 1
+  },
+  "trad_known": 1155,
+  "shikoku": 108,
+  "shikoku_buddhist": 108,
+  "japan": 114,
+  "philippines": 51,
+  "europe_pct": 72.78,
+  "trad_christian_pct": 76.92,
+  "trad_christian_known_pct": 88.57,
+  "top3_pct": 47.14,
+  "outside_europe": 362,
+  "near1": 208,
+  "near5": 332,
+  "near1_pct": 15.64,
+  "near5_pct": 24.96,
+  "eu_near1_pct": 20.87,
+  "eu_near5_pct": 33.57,
+  "outside_near5": 7
+ },
+ "compostela": {
+  "years": [
+   [
+    1985,
+    690
+   ],
+   [
+    1986,
+    1801
+   ],
+   [
+    1987,
+    2905
+   ],
+   [
+    1988,
+    3501
+   ],
+   [
+    1989,
+    5760
+   ],
+   [
+    1990,
+    4918
+   ],
+   [
+    1991,
+    7274
+   ],
+   [
+    1992,
+    9764
+   ],
+   [
+    1993,
+    99436
+   ],
+   [
+    1994,
+    15863
+   ],
+   [
+    1995,
+    19821
+   ],
+   [
+    1996,
+    23218
+   ],
+   [
+    1997,
+    25179
+   ],
+   [
+    1998,
+    30126
+   ],
+   [
+    1999,
+    154613
+   ],
+   [
+    2000,
+    55004
+   ],
+   [
+    2001,
+    61418
+   ],
+   [
+    2002,
+    68952
+   ],
+   [
+    2003,
+    74614
+   ],
+   [
+    2004,
+    179944
+   ],
+   [
+    2005,
+    93924
+   ],
+   [
+    2006,
+    100377
+   ],
+   [
+    2007,
+    114026
+   ],
+   [
+    2008,
+    125141
+   ],
+   [
+    2009,
+    145877
+   ],
+   [
+    2010,
+    272703
+   ],
+   [
+    2011,
+    179919
+   ],
+   [
+    2012,
+    192488
+   ],
+   [
+    2013,
+    215880
+   ],
+   [
+    2014,
+    237886
+   ],
+   [
+    2015,
+    262458
+   ],
+   [
+    2016,
+    277915
+   ],
+   [
+    2017,
+    301036
+   ],
+   [
+    2018,
+    327378
+   ],
+   [
+    2019,
+    347578
+   ],
+   [
+    2020,
+    54144
+   ],
+   [
+    2021,
+    178912
+   ],
+   [
+    2022,
+    437507
+   ],
+   [
+    2023,
+    446035
+   ],
+   [
+    2024,
+    499239
+   ],
+   [
+    2025,
+    530772
+   ]
+  ],
+  "first_year": 1985,
+  "first": 690,
+  "last_year": 2025,
+  "last": 530772,
+  "y2019": 347578,
+  "y2020": 54144,
+  "y2021": 178912,
+  "y2010": 272703,
+  "y1993": 99436,
+  "y2004": 179944,
+  "y1999": 154613,
+  "x_since_1985": 769,
+  "x_since_2004": 2.9,
+  "x_since_2010": 1.9
+ },
+ "wiki": {
+  "frances_km": 800,
+  "primitivo_km": 320,
+  "portugues_lisbon_km": 610,
+  "portugues_porto_km": 227,
+  "min_walk_km": 100,
+  "min_cycle_km": 200,
+  "unesco_es": 1993,
+  "unesco_fr": 1998,
+  "holy_year_next": 2027,
+  "frances_pct_2024": 47,
+  "sarria_pct_2024": 32,
+  "foot_pct_2024": 93,
+  "vf_sigeric_km": "1,700",
+  "vf_stages": 80,
+  "vf_year": 990,
+  "shikoku_temples": 88,
+  "shikoku_km": "1,200",
+  "shikoku_bekkaku": 20,
+  "olav_km": 640,
+  "kumano_unesco": 2004,
+  "hajj_2026": 1707301,
+  "arbaeen": "ten to twenty million",
+  "kumbh_2025_m": 660,
+  "revid": {
+   "Pilgrimage": 1382558741,
+   "Way of St. James": 1382787440,
+   "Via Francigena": 1376349937,
+   "Kumano Kodō": 1378657241,
+   "Shikoku Pilgrimage": 1380885777,
+   "St. Olav's Way": 1353600750,
+   "Pilgrims' Way": 1376012025,
+   "Hajj": 1383073310,
+   "Arba'een Pilgrimage": 1382388047,
+   "Kumbh Mela": 1383146190,
+   "Char Dham": 1364445029
+  },
+  "rev": {
+   "camino": 1382787440,
+   "vf": 1376349937,
+   "shikoku": 1380885777,
+   "olav": 1353600750,
+   "kumano": 1378657241,
+   "hajj": 1383073310,
+   "arbaeen": 1382388047,
+   "kumbh": 1383146190,
+   "pilgrimage": 1382558741
+  }
+ },
+ "meta": {
+  "page": "https://maps.tristanhotham.com/pilgrim-roads/",
+  "repo": "https://github.com/Tristan-Hotham/pilgrim-roads",
+  "doi": "10.5281/zenodo.23878608",
+  "blog": "https://blog.tristanhotham.com/2026/10/31/pilgrim-roads/",
+  "slug": "pilgrim-roads",
+  "santiago": [
+   42.8806,
+   -8.5446
+  ]
+ }
+}

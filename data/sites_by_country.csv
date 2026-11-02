@@ -1,0 +1,71 @@
+iso,country,sites,per_million,Christian,Buddhist,Muslim,Hindu,Jain,Jewish,Other,Not recorded
+DEU,Germany,239,2.87,219,0,0,0,0,0,0,20
+ITA,Italy,225,3.73,221,0,0,0,0,0,0,4
+ESP,Spain,163,3.46,150,0,0,0,0,0,0,13
+JPN,Japan,114,0.9,1,110,0,0,0,0,0,3
+POL,Poland,52,1.37,44,0,0,0,0,0,0,8
+PHL,Philippines,51,0.47,50,0,0,0,0,0,0,1
+AUT,Austria,48,5.41,42,0,0,0,0,0,0,6
+PRT,Portugal,43,4.19,31,0,0,0,0,0,0,12
+CZE,Czechia,41,3.84,21,0,0,0,0,0,0,20
+USA,United States,33,0.1,32,0,0,0,0,0,0,1
+CAN,Canada,28,0.74,26,0,0,0,0,0,0,2
+FRA,France,25,0.37,22,0,0,0,0,0,0,3
+IND,India,24,0.02,3,1,0,6,1,0,0,13
+BEL,Belgium,21,1.83,16,0,0,0,0,0,0,5
+TUR,Turkey,21,0.25,0,0,0,0,0,0,0,21
+CHE,Switzerland,20,2.33,20,0,0,0,0,0,0,0
+GBR,United Kingdom,18,0.27,17,0,0,0,0,0,0,1
+NLD,Netherlands,15,0.87,10,0,0,0,0,0,0,5
+IRL,Ireland,14,2.83,6,0,0,0,0,0,0,8
+HUN,Hungary,10,1.02,7,0,0,0,0,0,0,3
+BRA,Brazil,9,0.04,9,0,0,0,0,0,0,0
+KAZ,Kazakhstan,8,0.43,1,0,6,0,0,0,0,1
+CHL,Chile,7,0.37,5,0,0,0,0,0,0,2
+NPL,Nepal,6,0.21,0,1,0,1,0,0,0,4
+BIH,Bosnia and Herzegovina,6,1.82,4,0,0,0,0,0,0,2
+HRV,Croatia,6,1.48,5,0,0,0,0,0,0,1
+ISR,Israel,5,0.55,3,0,0,0,0,1,0,1
+ARG,Argentina,4,0.09,4,0,0,0,0,0,0,0
+PER,Peru,4,0.12,3,0,0,0,0,0,0,1
+MEX,Mexico,4,0.03,4,0,0,0,0,0,0,0
+SVN,Slovenia,4,1.92,2,0,0,0,0,0,0,2
+SVK,Slovakia,4,0.73,4,0,0,0,0,0,0,0
+LUX,Luxembourg,3,4.84,0,0,0,0,0,0,0,3
+ECU,Ecuador,3,0.17,3,0,0,0,0,0,0,0
+ALB,Albania,2,0.7,2,0,0,0,0,0,0,0
+VEN,Venezuela,2,0.07,2,0,0,0,0,0,0,0
+AUS,Australia,2,0.08,2,0,0,0,0,0,0,0
+AND,Andorra,2,25.93,2,0,0,0,0,0,0,0
+AZE,Azerbaijan,2,0.2,0,0,0,0,0,0,0,2
+CHN,China,2,0.0,1,0,1,0,0,0,0,0
+SLV,El Salvador,2,0.31,2,0,0,0,0,0,0,0
+URY,Uruguay,2,0.58,2,0,0,0,0,0,0,0
+NIC,Nicaragua,2,0.31,2,0,0,0,0,0,0,0
+CUB,Cuba,2,0.18,2,0,0,0,0,0,0,0
+EGY,Egypt,2,0.02,1,0,0,0,0,0,0,1
+GRC,Greece,2,0.19,2,0,0,0,0,0,0,0
+THA,Thailand,2,0.03,0,2,0,0,0,0,0,0
+SYR,Syria,2,0.12,1,0,0,0,0,0,0,1
+BOL,Bolivia,2,0.17,2,0,0,0,0,0,0,0
+KOR,South Korea,2,0.04,2,0,0,0,0,0,0,0
+AFG,Afghanistan,1,0.03,0,0,1,0,0,0,0,0
+AGO,Angola,1,0.03,1,0,0,0,0,0,0,0
+BEN,Benin,1,0.08,1,0,0,0,0,0,0,0
+COL,Colombia,1,0.02,1,0,0,0,0,0,0,0
+ERI,Eritrea,1,0.16,1,0,0,0,0,0,0,0
+DZA,Algeria,1,0.02,1,0,0,0,0,0,0,0
+BGD,Bangladesh,1,0.01,0,0,0,0,0,0,0,1
+LVA,Latvia,1,0.52,1,0,0,0,0,0,0,0
+LTU,Lithuania,1,0.36,0,0,0,0,0,0,0,1
+LBN,Lebanon,1,0.15,1,0,0,0,0,0,0,0
+MLT,Malta,1,1.99,1,0,0,0,0,0,0,0
+KHM,Cambodia,1,0.06,1,0,0,0,0,0,0,0
+PAK,Pakistan,1,0.0,1,0,0,0,0,0,0,0
+MMR,Myanmar,1,0.02,0,1,0,0,0,0,0,0
+PRY,Paraguay,1,0.14,0,0,0,0,0,0,0,1
+PSE,Palestine,1,0.21,0,0,0,0,0,0,0,1
+ROU,Romania,1,0.05,1,0,0,0,0,0,0,0
+PRI,Puerto Rico,1,0.31,1,0,0,0,0,0,0,0
+TGO,Togo,1,0.12,1,0,0,0,0,0,0,0
+UKR,Ukraine,1,0.02,0,0,0,0,0,0,0,1

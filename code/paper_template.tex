@@ -1,0 +1,156 @@
+\documentclass[11pt,a4paper]{article}
+\usepackage{fontspec}
+\setmainfont{TeX Gyre Pagella}
+\newfontfamily\headfont{Inter}[UprightFont=*-ExtraBold,BoldFont=*-ExtraBold,Extension=.otf,Path=/usr/share/fonts/opentype/inter/]
+\usepackage[a4paper,margin=2.3cm]{geometry}
+\usepackage{graphicx,booktabs,float,caption,array,xcolor,longtable}
+\usepackage{xurl}
+\usepackage[hidelinks]{hyperref}
+\usepackage{titlesec}
+\usepackage[round]{natbib}
+\usepackage{setspace}
+\setstretch{1.05}
+\renewcommand{\topfraction}{0.9}
+\renewcommand{\bottomfraction}{0.8}
+\renewcommand{\textfraction}{0.1}
+\renewcommand{\floatpagefraction}{0.75}
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{0.55em}
+\titleformat{\section}{\headfont\Large}{\thesection}{0.8em}{}
+\titleformat{\subsection}{\headfont\large}{\thesubsection}{0.8em}{}
+\captionsetup{font=small,labelfont=bf}
+\urlstyle{same}
+\hypersetup{pdftitle={Pilgrim Roads},pdfauthor={Tristan Hotham}}
+
+\begin{document}
+\begin{center}
+{\Large\bfseries Pilgrim Roads\par}
+\vspace{0.4em}
+{\large Mapping the waymarked pilgrimage routes and places of OpenStreetMap and Wikidata:\\{{total.km|int}} km of routes and {{sites.n|int}} pilgrimage sites\par}
+\vspace{1.2em}
+{\large Tristan Hotham\par}
+\vspace{0.3em}
+{\small Independent researcher\\
+ORCID: 0000-0003-4931-9349\\
+DOI: \href{https://doi.org/{{meta.doi}}}{https://doi.org/{{meta.doi}}}\par}
+\vspace{0.8em}
+2026
+\end{center}
+
+\begin{quote}
+\small
+\begin{center}\textbf{Abstract}\end{center}
+I measure the waymarked pilgrimage routes recorded in OpenStreetMap and the pilgrimage sites recorded in Wikidata. From {{source.fetched|int}} OpenStreetMap route relations tagged as pilgrimage routes I keep {{source.kept|int}}, split their ways into unique segments so that no stretch of path shared by several relations is counted twice, and assign each segment to a country and to a route family. The result is {{total.km|int}} km of pilgrim routes in {{total.n_countries|int}} countries, {{source.dup_pct|f1}}\% less than the naive sum of all relations. The Camino de Santiago accounts for {{fam.camino.km|int}} km ({{fam.camino.pct_of_all|int}}\%) in {{fam.camino.n_countries|int}} countries, and Germany has more of it ({{fam.camino.by_iso.DEU|int}} km) than Spain ({{fam.camino.by_iso.ESP|int}} km), followed by Poland ({{fam.camino.by_iso.POL|int}} km). Only {{fam.camino.within500_pct|int}}\% of the waymarked Camino lies within 500 km of Santiago; half lies more than {{fam.camino.median_d|int}} km away, and the farthest stretch, in Ukraine, is {{fam.camino.far_km|int}} km from the cathedral. The Via Francigena ({{fam.francigena.km|int}} km), the St Olav Ways ({{fam.olav.km|int}} km) and the Marian ways of central Europe ({{fam.marian.km|int}} km) make up most of the rest. Wikidata lists {{sites.n|int}} pilgrimage sites in {{sites.n_countries|int}} countries, led by Germany, Italy, Spain and Japan, where {{sites.shikoku|int}} sites lie on Shikoku. Both sources are heavily European: {{total.europe_pct|f1}}\% of route kilometres and {{sites.europe_pct|int}}\% of sites. The largest pilgrimages in the world, to Mecca, Karbala and the Kumbh Mela, are absent from the route data, and some of the best known Christian routes are missing from the extract. The figures describe what volunteers have mapped, not where pilgrims walk.
+
+\textbf{Keywords:} pilgrimage; Camino de Santiago; Way of St James; Via Francigena; St Olav Ways; OpenStreetMap; Wikidata; volunteered geographic information; mapping
+\end{quote}
+
+\section{Introduction}
+Pilgrimage is one of the oldest reasons for long journeys on foot, and in Europe it has had a striking revival. The Camino de Santiago, which tradition traces to the early ninth century, was declared one of the three great pilgrimages of Christendom after 1492, with Jerusalem and Rome \citep{wikicamino}. In 1985 the Pilgrim's Office in Santiago issued {{compostela.first|int}} certificates of completion; in 2025 it issued {{compostela.last|int}}. Alongside the revival, St James societies, hiking clubs and parishes have waymarked routes far beyond Spain, and the Via Francigena to Rome \citep{wikivf}, the St Olav Ways to Trondheim \citep{wikiolav} and many lesser pilgrim paths have been signed and promoted.
+
+OpenStreetMap volunteers record such waymarked routes as route relations, and many are tagged as pilgrimage routes. Wikidata lists places of pilgrimage. Together they offer a first open, measurable picture of the world's pilgrim roads. This paper asks four questions. How many kilometres of waymarked pilgrimage route are mapped, and where? How is the Camino de Santiago, the largest network, distributed in space? Which other route families and long routes stand out? And where are the pilgrimage sites? Throughout, the emphasis is on what the open data can and cannot show. The paper accompanies an interactive map (\url{{{meta.page}}}).
+
+\section{Data}
+\textbf{Routes.} An extract of OpenStreetMap \citep{osm} downloaded through the Overpass API in {{source.osm_year|raw}}: route relations tagged as pilgrimage routes, or linked to Wikidata pilgrim route items. Of {{source.ids_requested|int}} relation ids requested, {{source.failed_batches|int}} batches ({{source.ids_failed|int}} ids, {{source.failed_pct|f1}}\%) failed and are missing; {{source.fetched|int}} relations were returned with their tags, the geometry of their ways (coordinates to four decimal places) and the ids of child relations. {{source.with_pilgrimage_tag|int}} carry a pilgrimage tag and {{source.with_wikidata|int}} a Wikidata link.
+
+\textbf{Pilgrim route items.} A Wikidata \citep{wikidata} query (run with QLever) for items that are pilgrim routes or parts of the Way of St James: {{wd.items|int}} items, of which {{wd.stations_of_cross|int}} are stations of the cross and {{wd.routes|int}} are routes. These are used to classify relations and to check the extract's coverage.
+
+\textbf{Sites.} A Wikidata query for pilgrimage sites, with coordinates, country and religion: {{sites.rows|int}} rows, {{sites.n|int}} distinct items, {{sites.unlabelled|int}} without an English label.
+
+\textbf{Context.} English Wikipedia articles on the Way of St James, the Via Francigena, the Shikoku pilgrimage, St Olav's Way, the Kumano Kodō, the Hajj, the Arba'een pilgrimage and the Kumbh Mela \citep{wikicamino,wikivf,wikishikoku,wikiolav,wikikumano,wikihajj,wikiarbaeen,wikikumbh} supply historical facts, route lengths and the yearly certificate counts. Country outlines and populations come from Natural Earth \citep{naturalearth}.
+
+\section{Methods}
+\subsection{Selecting relations}
+I keep every relation except those whose route tag is a road, bus route, ski piste or fitness trail, three network relations, and six that inspection showed are not pilgrimage routes (a forest trail named after the Pilgrim River in Michigan, a recreational rail trail in Texas, two ecological trails in Colombia, a park walk in Canberra and a running route in York). That leaves {{source.kept|int}} relations: {{source.leaves|int}} without child relations and {{source.containers|int}} containers ({{source.superroutes|int}} of them super-routes). Containers list {{source.subrels_listed|int}} child relations, {{source.subrels_missing|int}} of which are not in the extract; {{source.containers_all_missing|int}} containers have none of their children.
+
+\subsection{Counting each stretch once}
+The same path often belongs to several relations: a stage and the super-route it belongs to, two routes that share a valley, a walking and a cycling version, or a way listed twice. I split every way into consecutive point pairs, treat a pair as the same segment whichever direction it is drawn in, and keep each segment once. The {{source.ways|int}} ways with {{source.points|int}} points give {{source.seg_raw|int}} segments, of which {{source.seg_unique|int}} are unique. The great circle length of the raw segments is {{source.km_raw|int}} km; of the unique segments, {{source.km|int}} km. Because the coordinates are rounded to about 10 m, two separately drawn but parallel paths are not merged; I found no sign that this matters at the scale reported. Each segment is placed in the Natural Earth 1:10m country containing its midpoint; {{source.km_no_country|int}} km fall just outside every outline, on coasts and estuaries.
+
+\subsection{Route families}
+Each relation is assigned to one family. A relation is Camino de Santiago if any of its names (in any language), its pilgrimage, symbol or Wikipedia tags mention St James or Santiago (Jakobsweg, Droga św. Jakuba, Svatojakubská cesta, Camí de Sant Jaume and so on), if it links to the Wikidata item for the Way of St James, or if its symbol is a scallop shell; Via Francigena, St Olav Ways and Marian ways are recognised by similar rules (common.py in the code lists them). A relation with no telling name inherits the family of its nearest classified parent, and a container still unplaced takes the family of most of its children's length. Table~\ref{tab:fams} shows how each family's relations were placed. A family's kilometres include every segment any of its relations uses; {{total.multi_family_km|int}} km are used by more than one family and so count in each.
+
+\subsection{Distance from Santiago and route length}
+For the Camino I measure the great circle distance from the cathedral of Santiago de Compostela (42.8806°N, 8.5446°W) to each segment's midpoint. This is distance as the crow flies, not walking distance. Route length is reported in two ways: for a top-level relation (one that is not the child of another) with all its descendants, segments counted once; and for single relations with no children, on their own ways.
+
+\subsection{Sites}
+Each site's country is the one Wikidata gives, checked against its coordinates (where Wikidata gives more than one country, the one containing the point). Tradition comes from Wikidata's religion values where present, grouped as Christian, Buddhist, Muslim and so on. For a second, rougher reading I also assign a tradition from the site's name (``church'', ``Wallfahrtskirche'', ``Santuário'', ``-ji temple'', ``mausoleum'') where no religion is recorded. Rates per million people use Natural Earth population estimates. To ask whether the mapped routes lead to the listed sites, I measure each site's distance to the nearest point of any route.
+
+{{TABLE_FAMS}}
+
+\section{Results}
+\subsection{How much and where}
+The extract holds {{total.km|int}} km of unique waymarked pilgrim route in {{total.n_countries|int}} countries (Figure~\ref{fig:map}). Germany has the most ({{total.countries.0.km|int}} km, {{total.countries.0.pct|int}}\%), then Spain ({{total.countries.1.km|int}} km), Italy ({{total.countries.2.km|int}} km), Poland ({{total.countries.3.km|int}} km), Hungary ({{total.countries.4.km|int}} km) and Austria ({{total.countries.5.km|int}} km). Only {{total.outside_km|int}} km lie outside Europe, in {{total.n_outside_countries|int}} countries: Brazil ({{total.outside.0.km|int}} km, one route to the shrine of Aparecida), Japan ({{total.outside.1.km|int}} km, mostly the Kumano Kodō, \citealp{wikikumano}) and short paths in Israel, India and elsewhere in Asia.
+
+\begin{figure}[tbp]\centering\includegraphics[width=.92\textwidth]{f_map.png}
+\caption{Waymarked pilgrim routes in Europe by family, with rings at 500 km intervals from the cathedral of Santiago de Compostela. Lines simplified for display.}\label{fig:map}\end{figure}
+
+\subsection{The Camino de Santiago}
+The Camino accounts for {{fam.camino.km|int}} km ({{fam.camino.pct_of_all|int}}\% of the total) in {{fam.camino.n_countries|int}} countries (Figure~\ref{fig:camino}, Table~\ref{tab:camino}). Germany has {{fam.camino.by_iso.DEU|int}} km ({{fam.camino.de_pct|int}}\%), {{fam.camino.de_es_ratio|f2}} times Spain's {{fam.camino.by_iso.ESP|int}} km ({{fam.camino.es_pct|int}}\%); Poland has {{fam.camino.by_iso.POL|int}} km. Outside Spain and Portugal lie {{fam.camino.outside_es_pt_pct|int}}\% of the network. France, with {{fam.camino.fr_km|int}} km, is clearly under-represented: several of its historic routes are among the relations missing from the extract (Section~\ref{sec:cov}), and others are probably mapped as long distance hiking trails without pilgrimage tags. The Spanish figure is also an undercount, since several stages of the Camino Francés, including its final stretch into Santiago, are missing.
+
+\begin{figure}[tbp]\centering\includegraphics[width=\textwidth]{f_camino.png}
+\caption{Unique kilometres of waymarked Camino de Santiago in OpenStreetMap, by country (top 14).}\label{fig:camino}\end{figure}
+
+{{TABLE_CAMINO}}
+
+Measured from the cathedral, the network is strikingly remote from its goal (Figure~\ref{fig:bands}). Only {{fam.camino.within500_pct|int}}\% lies within 500 km ({{fam.camino.within100_km|int}} km within 100 km); half lies more than {{fam.camino.median_d|int}} km away; and {{fam.camino.over1000_pct|int}}\% more than 1,000 km away. The band from {{fam.camino.max_band|raw}} holds {{fam.camino.max_band_pct|int}}\%, mostly in Germany, Austria and Croatia, and the band beyond 2,000 km, mostly in Poland, another {{bands.5.pct|int}}\%. The farthest stretch is the {{fam.camino.far_route|raw}} at {{fam.camino.far_near.city|raw}} in {{fam.camino.far_country|raw}}, {{fam.camino.far_km|int}} km from Santiago; the northernmost reaches {{fam.camino.north_lat|f1}}°N in {{fam.camino.north_country|raw}}.
+
+\begin{figure}[tbp]\centering\includegraphics[width=\textwidth]{f_bands.png}
+\caption{Waymarked Camino kilometres by great circle distance from the cathedral of Santiago de Compostela.}\label{fig:bands}\end{figure}
+
+\subsection{Other families and the longest routes}
+The Via Francigena has {{fam.francigena.km|int}} km, {{fam.francigena.it_pct|int}}\% of it in Italy; Sigeric's itinerary of around {{wiki.vf_year|int}} had {{wiki.vf_stages|int}} stages and some {{wiki.vf_sigeric_km|raw}} km \citep{wikivf}, but the mapped system also includes variants, the extension south of Rome and the Francigene of Sicily. The St Olav Ways have {{fam.olav.km|int}} km, {{fam.olav.no_pct|int}}\% in Norway and most of the rest in Sweden, against about {{wiki.olav_km|int}} km for the main route from Oslo \citep{wikiolav}. The Marian ways have {{fam.marian.km|int}} km, {{fam.marian.hu_pct|int}}\% in Hungary, most of them the Via Mariae network, with Portugal's routes to Fátima adding {{fam.marian.by_iso.PRT|int}} km. Other routes, from the Lutherweg to the roads to Assisi, total {{fam.other.km|int}} km.
+
+Among {{n_top_routes|int}} top-level route systems, the longest is the Via Francigena at {{longest.0.km|int}} km, followed by the regional Jakobsweg networks of Bavaria ({{longest.1.km|int}} km) and Baden-Württemberg ({{longest.2.km|int}} km) (Figure~\ref{fig:longest}, Table~\ref{tab:longest}). Among single relations without children the longest is the {{longest_leaf.0.name|raw}} ({{longest_leaf.0.km|int}} km), then the {{longest_leaf.1.name|raw}} ({{longest_leaf.1.km|int}} km); the median single relation is {{leaf_median_km|f1}} km long, because most routes are mapped stage by stage.
+
+\begin{figure}[tbp]\centering\includegraphics[width=\textwidth]{f_longest.png}
+\caption{The longest top-level pilgrim route systems, with all their stages and branches, coloured by family.}\label{fig:longest}\end{figure}
+
+{{TABLE_LONGEST}}
+
+\subsection{Pilgrimage sites}
+Wikidata's {{sites.n|int}} pilgrimage sites are spread over {{sites.n_countries|int}} countries, but Germany ({{sites.by_iso.DEU|int}}), Italy ({{sites.by_iso.ITA|int}}) and Spain ({{sites.by_iso.ESP|int}}) hold {{sites.top3_pct|int}}\% of them (Figures~\ref{fig:sites} and~\ref{fig:sitescountry}). Japan has {{sites.japan|int}}, of which {{sites.shikoku|int}} are on Shikoku, the island of the {{wiki.shikoku_temples|int}} temple pilgrimage \citep{wikishikoku}; the Philippines has {{sites.philippines|int}}. Among countries with ten or more sites, Austria has the most per head ({{sites.dens.0.per_m|f1}} per million people), then Portugal ({{sites.dens.1.per_m|f1}}) and Czechia ({{sites.dens.2.per_m|f1}}). A religion is recorded for {{sites.rec_n|int}} sites ({{sites.rec_pct|int}}\%), {{sites.rec_christian_pct|int}}\% of them Christian. Adding a reading from names gives {{sites.trad.Christian|int}} Christian, {{sites.trad.Buddhist|int}} Buddhist, {{sites.trad.Muslim|int}} Muslim and {{sites.trad.Hindu|int}} Hindu sites, with {{sites.trad.Not recorded|int}} unknown. Only {{sites.near5|int}} sites ({{sites.near5_pct|int}}\%; {{sites.eu_near5_pct|int}}\% in Europe) lie within 5 km of a mapped route.
+
+\begin{figure}[tbp]\centering\includegraphics[width=\textwidth]{f_sites.png}
+\caption{Wikidata pilgrimage sites, coloured by tradition (recorded, or read from the name).}\label{fig:sites}\end{figure}
+
+\begin{figure}[tbp]\centering\includegraphics[width=\textwidth]{f_sites_country.png}
+\caption{Pilgrimage sites by country: count (left) and per million people for countries with ten or more sites (right).}\label{fig:sitescountry}\end{figure}
+
+\subsection{Pilgrims on the Camino}
+The certificate counts (Figure~\ref{fig:comp}) rose from {{compostela.first|int}} in 1985 to {{compostela.y2019|int}} in 2019, fell to {{compostela.y2020|int}} in 2020 and reached {{compostela.last|int}} in 2025, {{compostela.x_since_1985|int}} times the 1985 figure. Holy Years, when 25 July falls on a Sunday, stand out (1993: {{compostela.y1993|int}}; 2010: {{compostela.y2010|int}}). In 2024, {{wiki.frances_pct_2024|int}}\% of certificate holders walked the Camino Francés and {{wiki.sarria_pct_2024|int}}\% started at Sarria \citep{wikicamino}: the pilgrims are concentrated on a small part of the network mapped here.
+
+\begin{figure}[tbp]\centering\includegraphics[width=\textwidth]{f_compostela.png}
+\caption{Compostela certificates issued per year, 1985 to 2025, as tabulated in Wikipedia from the archives of Santiago de Compostela. Gold: Holy Years.}\label{fig:comp}\end{figure}
+
+\section{Coverage and limitations}\label{sec:cov}
+First, the extract is incomplete. {{source.ids_failed|int}} relation ids failed to download, {{source.subrels_missing|int}} child relations listed by containers are absent, and of {{wd.with_osm|int}} Wikidata pilgrim route items (other than stations of the cross) that name an OpenStreetMap relation, {{wd.with_osm_missing|int}} are missing, among them the Camino Francés super-route, the Via Turonensis, the Via Tolosana, the Sanabrés and Catalan ways and the Romboleden. All totals are therefore lower bounds.
+
+Second, OpenStreetMap is volunteered: what is mapped, and how it is tagged, varies by country and community. Germany's lead over Spain on the Camino may partly reflect differences in how thoroughly each country's routes have been mapped and tagged; France's near absence reflects tagging and the missing relations, not a lack of routes.
+
+Third, both sources are European. {{total.europe_pct|f1}}\% of the route kilometres and {{sites.europe_pct|int}}\% of the sites are in Europe. The largest pilgrimages are not walking routes in this sense and do not appear: the Hajj drew {{wiki.hajj_2026|int}} pilgrims in 2026 \citep{wikihajj}, the Arba'een walk to Karbala draws {{wiki.arbaeen|raw}} a year \citep{wikiarbaeen}, and about {{wiki.kumbh_2025_m|int}} million attended the Kumbh Mela in 2025 \citep{wikikumbh}. Historic roads such as the Darb Zubayda from Kufa to Mecca ({{wd.darb_zubayda_km|int}} km in Wikidata) are not mapped as routes, and the Shikoku circuit appears only through its temples.
+
+Fourth, the family rules are keyword based and will misplace a few relations; the scallop shell rule alone placed {{fam.camino.shell_rel|int}} relations in the Camino. Fifth, the tradition read from site names is a rough guide. Sixth, distances from Santiago are straight lines.
+
+\section{Conclusion}
+OpenStreetMap records {{total.km|int}} km of waymarked pilgrim routes, and more than half of them lead, eventually, to Santiago. The modern Camino is not a Spanish road but a continental web whose centre of mass lies in Germany and central Europe, {{fam.camino.median_d|int}} km from the tomb it leads to, while the pilgrims themselves crowd onto its last few hundred kilometres. The open data show this European revival in detail, and they show almost nothing of the much larger pilgrimages of Islam and Hinduism. A map of the world's pilgrim roads made from volunteered data is, for now, a map of where those volunteers live and walk.
+
+\section*{Data and code availability}
+The interactive map is at \url{{{meta.page}}}. Data and code are at \url{{{meta.repo}}} and archived with this paper at \url{https://doi.org/{{meta.doi}}}. Text, figures and derived data are released under CC BY 4.0, except the route geometry and route table derived from OpenStreetMap, which are released under the Open Database License (ODbL) 1.0; code under the MIT licence. Route data © OpenStreetMap contributors.
+
+\section*{AI statement}
+I wrote the text, with drafting and editing assistance from Claude (Anthropic), which also helped prepare the analysis code. I reviewed and checked all text and results.
+
+\begin{thebibliography}{12}
+\bibitem[OpenStreetMap contributors(2026)]{osm} OpenStreetMap contributors (2026) Planet data via the Overpass API. Open Database License 1.0. \url{https://www.openstreetmap.org}
+\bibitem[Wikidata(2026)]{wikidata} Wikidata contributors (2026) Wikidata. CC0. \url{https://www.wikidata.org}
+\bibitem[Natural Earth(2026)]{naturalearth} Natural Earth (2026) Admin 0 countries and populated places, 1:50m and 1:10m. Public domain. \url{https://www.naturalearthdata.com/}
+\bibitem[Wikipedia(2026a)]{wikicamino} Wikipedia contributors (2026) Way of St. James (revision {{wiki.rev.camino|raw}}). CC BY-SA 4.0. \url{https://en.wikipedia.org/wiki/Camino_de_Santiago}
+\bibitem[Wikipedia(2026b)]{wikivf} Wikipedia contributors (2026) Via Francigena (revision {{wiki.rev.vf|raw}}). CC BY-SA 4.0. \url{https://en.wikipedia.org/wiki/Via_Francigena}
+\bibitem[Wikipedia(2026c)]{wikishikoku} Wikipedia contributors (2026) Shikoku Pilgrimage (revision {{wiki.rev.shikoku|raw}}). CC BY-SA 4.0. \url{https://en.wikipedia.org/wiki/Shikoku_Pilgrimage}
+\bibitem[Wikipedia(2026d)]{wikiolav} Wikipedia contributors (2026) St. Olav's Way (revision {{wiki.rev.olav|raw}}). CC BY-SA 4.0. \url{https://en.wikipedia.org/wiki/St._Olav's_Way}
+\bibitem[Wikipedia(2026e)]{wikikumano} Wikipedia contributors (2026) Kumano Kodō (revision {{wiki.rev.kumano|raw}}). CC BY-SA 4.0. \url{https://en.wikipedia.org/wiki/Kumano_Kodō}
+\bibitem[Wikipedia(2026f)]{wikihajj} Wikipedia contributors (2026) Hajj (revision {{wiki.rev.hajj|raw}}). CC BY-SA 4.0. \url{https://en.wikipedia.org/wiki/Hajj}
+\bibitem[Wikipedia(2026g)]{wikiarbaeen} Wikipedia contributors (2026) Arba'een Pilgrimage (revision {{wiki.rev.arbaeen|raw}}). CC BY-SA 4.0. \url{https://en.wikipedia.org/wiki/Arba'een_Pilgrimage}
+\bibitem[Wikipedia(2026h)]{wikikumbh} Wikipedia contributors (2026) Kumbh Mela (revision {{wiki.rev.kumbh|raw}}). CC BY-SA 4.0. \url{https://en.wikipedia.org/wiki/Kumbh_Mela}
+\end{thebibliography}
+\end{document}
