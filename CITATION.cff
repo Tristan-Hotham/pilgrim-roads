@@ -1,0 +1,24 @@
+cff-version: 1.2.0
+message: "If you use this data or code, please cite it as below."
+title: "Pilgrim Roads: Mapping the Waymarked Pilgrimage Routes and Places of OpenStreetMap and Wikidata"
+type: dataset
+authors:
+  - family-names: Hotham
+    given-names: Tristan
+    orcid: "https://orcid.org/0000-0003-4931-9349"
+    affiliation: "Independent researcher"
+doi: "10.5281/zenodo.23878608"
+url: "https://maps.tristanhotham.com/pilgrim-roads/"
+repository-code: "https://github.com/Tristan-Hotham/pilgrim-roads"
+license: CC-BY-4.0
+keywords:
+  - "pilgrimage"
+  - "Camino de Santiago"
+  - "Way of St James"
+  - "Via Francigena"
+  - "St Olav Ways"
+  - "OpenStreetMap"
+  - "Wikidata"
+  - "volunteered geographic information"
+  - "open data"
+  - "maps"
